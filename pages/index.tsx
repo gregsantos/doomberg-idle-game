@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Box, Text, Button } from '@chakra-ui/core'
-import Terminal from 'terminal-in-react'
+import Terminal from 'react-console-emulator'
 import Logo from '../components/Logo'
 import Newsbar from '../components/Newsbar'
 import { useInterval } from '../hooks/useInterval'
@@ -74,29 +74,26 @@ export const Index = ({ name = 'kiddo' }: IndexProps) => {
       </Box>
       <Flex
         flex={1}
+        p={3}
         justify='center'
         align='center'
         border='1px solid'
         borderColor='green.300'
       >
         <Terminal
-          hideTopBar
-          allowTabs={false}
-          color='green'
-          backgroundColor='black'
-          barColor='black'
-          style={{ fontWeight: 'bold', fontSize: '1em' }}
+          welcomeMessage={'Welcome to the React terminal!'}
+          promptLabel={'me@DOOMBERG:~$'}
+          autoFocus
+          style={{ alignSelf: 'flex-start' }}
           commands={{
-            showmsg: showMsg,
-            popup: () => alert('Terminal in React'),
+            echo: {
+              description: 'Echo a passed string.',
+              usage: 'echo <string>',
+              fn: function () {
+                return `${Array.from(arguments).join(' ')}`
+              },
+            },
           }}
-          description={{
-            color: false,
-            show: false,
-            clear: false,
-            popup: 'Alert in window',
-          }}
-          msg='You can write anything here. Example - Hello! My name is Foo and I like Bar.'
         />
       </Flex>
       <Box p={3} border='1px solid' borderColor='green.300'>
@@ -107,22 +104,18 @@ export const Index = ({ name = 'kiddo' }: IndexProps) => {
           color='green.300'
           border='1px solid'
           borderColor='green.300'
-          zIndex={100}
         >
-          <Button mb={3} onClick={click} variantColor='green' variant='outline'>
+          <Button
+            mb={3}
+            onClick={click}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+          >
             Work
           </Button>
           <Flex id='slider' align='center' direction={['row', 'row', 'column']}>
-            <Flex align='center' m={2}>
-              <Text fontSize='sm' mr={2}>
-                Leverage
-              </Text>
-              <label className='switch'>
-                <input type='checkbox' />
-                <span className='slider'></span>
-              </label>
-            </Flex>
-            <Flex align='center'>
+            <Flex align='center' m={2} zIndex={100}>
               <Text fontSize='sm' mr={2}>
                 Leverage
               </Text>
