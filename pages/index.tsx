@@ -15,7 +15,7 @@ const diff =
 const initialTime = diff
 const interval = 100
 
-const showMsg = () => 'Hello World'
+// const showMsg = () => 'Hello World'
 
 export const Index = ({ name = 'kiddo' }: IndexProps) => {
   //   const [response, setResponse] = useState<null | { price: number }>(null);
