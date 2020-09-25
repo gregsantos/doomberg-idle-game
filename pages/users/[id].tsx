@@ -1,9 +1,9 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 
-import { User } from '../../interfaces'
-import { sampleUserData } from '../../utils/sample-data'
-import Layout from '../../components/Layout'
-import ListDetail from '../../components/ListDetail'
+import { User } from 'interfaces'
+import { sampleUserData } from 'utils/sample-data'
+import Layout from 'components/Layout'
+import ListDetail from 'components/ListDetail'
 
 type Props = {
   item?: User
@@ -13,7 +13,7 @@ type Props = {
 const StaticPropsDetail = ({ item, errors }: Props) => {
   if (errors) {
     return (
-      <Layout title="Error | Next.js + TypeScript Example">
+      <Layout title='Error | Next.js + TypeScript Example'>
         <p>
           <span style={{ color: 'red' }}>Error:</span> {errors}
         </p>

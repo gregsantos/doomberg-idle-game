@@ -1,0 +1,19 @@
+Dockerfile
+README.md
+node_modules
+*.log
+.next
+.vscode
+
+# blacklist everything
+# /*
+
+# whitelist
+#
+# !/Dockerfile
+# !/package.json
+# !/package-lock.json
+# !/next.config.js
+# !/components/
+# !/helpers/
+# !/pages/

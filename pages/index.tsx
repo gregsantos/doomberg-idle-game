@@ -1,15 +1,148 @@
-import Link from 'next/link'
-import Layout from '../components/Layout'
+import React, { useState, useEffect } from 'react'
+import { Flex, Box, Text, Button } from '@chakra-ui/core'
+import Terminal from 'terminal-in-react'
+import Logo from '../components/Logo'
+import Newsbar from '../components/Newsbar'
+import { useInterval } from '../hooks/useInterval'
+import Counter from '../components/Counter'
+// import onLoad from '../utils/'
 
-const IndexPage = () => (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <h1>Hello Next.js 👋</h1>
-    <p>
-      <Link href="/about">
-        <a>About</a>
-      </Link>
-    </p>
-  </Layout>
-)
+type IndexProps = { name: string }
 
-export default IndexPage
+const diff =
+  new Date().setFullYear(new Date().getFullYear() + 62) - Math.floor(Date.now())
+
+const initialTime = diff
+const interval = 100
+
+const showMsg = () => 'Hello World'
+
+export const Index = ({ name = 'kiddo' }: IndexProps) => {
+  //   const [response, setResponse] = useState<null | { price: number }>(null);
+  const [state, setState] = useState({
+    netWorth: 0,
+    count: initialTime,
+    payRate: 10,
+  })
+
+  useEffect(() => {
+    // onLoad()
+  }, [])
+
+  useInterval(() => {
+    setState({ ...state, count: state.count - (3600 / 60) * 1000 })
+  }, interval)
+
+  const click = () => {
+    setState({
+      ...state,
+      netWorth: state.netWorth + state.payRate * 1,
+      count: (state.count / 1000 - 3600 * 8) * 1000,
+    })
+  }
+
+  return (
+    <Box
+      display={{ base: 'flex', md: 'grid' }}
+      flexDirection='column'
+      gridTemplateColumns='minmax(245px, 1fr) 2fr minmax(245px, 1fr)'
+      gridTemplateRows='auto 1fr auto'
+      minHeight='100vh'
+    >
+      <header>
+        <Flex p={3} direction='column' align='center'>
+          <Logo width='50' height='25' />
+          <h1>DOOMBERG</h1>
+          <h3>{name}</h3>
+        </Flex>
+      </header>
+      <Box p={3} border='1px solid' borderColor='green.300'>
+        <Flex
+          direction='column'
+          justify='center'
+          padding='20px'
+          color='green.300'
+          border='1px solid'
+          borderColor='green.300'
+          zIndex={100}
+        >
+          <Box color='green.300'>Net Worth</Box>
+          <Box>$ {state.netWorth}</Box>
+          <Box color='green.300'>Time till Death</Box>
+          <Counter timeLeft={state.count} />
+        </Flex>
+      </Box>
+      <Flex
+        flex={1}
+        justify='center'
+        align='center'
+        border='1px solid'
+        borderColor='green.300'
+      >
+        <Terminal
+          hideTopBar
+          allowTabs={false}
+          color='green'
+          backgroundColor='black'
+          barColor='black'
+          style={{ fontWeight: 'bold', fontSize: '1em' }}
+          commands={{
+            showmsg: showMsg,
+            popup: () => alert('Terminal in React'),
+          }}
+          description={{
+            color: false,
+            show: false,
+            clear: false,
+            popup: 'Alert in window',
+          }}
+          msg='You can write anything here. Example - Hello! My name is Foo and I like Bar.'
+        />
+      </Flex>
+      <Box p={3} border='1px solid' borderColor='green.300'>
+        <Flex
+          direction='column'
+          justify='center'
+          padding={3}
+          color='green.300'
+          border='1px solid'
+          borderColor='green.300'
+          zIndex={100}
+        >
+          <Button mb={3} onClick={click} variantColor='green' variant='outline'>
+            Work
+          </Button>
+          <Flex id='slider' align='center' direction={['row', 'row', 'column']}>
+            <Flex align='center' m={2}>
+              <Text fontSize='sm' mr={2}>
+                Leverage
+              </Text>
+              <label className='switch'>
+                <input type='checkbox' />
+                <span className='slider'></span>
+              </label>
+            </Flex>
+            <Flex align='center'>
+              <Text fontSize='sm' mr={2}>
+                Leverage
+              </Text>
+              <label className='switch'>
+                <input type='checkbox' />
+                <span className='slider'></span>
+              </label>
+            </Flex>
+          </Flex>
+        </Flex>
+      </Box>
+      <footer>
+        <Newsbar />
+      </footer>
+      <div id='screen' />
+      <div id='scanline' />
+      <div id='interlace' />
+      <div id='green-light' />
+    </Box>
+  )
+}
+
+export default Index
