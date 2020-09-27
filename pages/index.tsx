@@ -81,10 +81,16 @@ export const Index = ({ name = 'kiddo' }: IndexProps) => {
         borderColor='green.300'
       >
         <Terminal
-          welcomeMessage={'Welcome to the React terminal!'}
-          promptLabel={'me@DOOMBERG:~$'}
           autoFocus
-          style={{ alignSelf: 'flex-start' }}
+          welcomeMessage={'Welcome to the Doomberg terminal!'}
+          promptLabel={'me@DOOMBERG:~$'}
+          style={{
+            height: '100%',
+            width: '100%',
+            alignSelf: 'flex-start',
+            minHeight: '50px',
+          }}
+          commandCallback={(result) => console.log(result)}
           commands={{
             echo: {
               description: 'Echo a passed string.',
