@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Flex, Box, Text, Button } from '@chakra-ui/core'
 import Terminal from 'react-console-emulator'
 import Logo from '../components/Logo'
@@ -15,19 +15,13 @@ const diff =
 const initialTime = diff
 const interval = 100
 
-// const showMsg = () => 'Hello World'
-
-export const Index = ({ name = 'kiddo' }: IndexProps) => {
+export const Index = ({ name = 'anonymous' }: IndexProps) => {
   //   const [response, setResponse] = useState<null | { price: number }>(null);
   const [state, setState] = useState({
     netWorth: 0,
     count: initialTime,
     payRate: 10,
   })
-
-  useEffect(() => {
-    // onLoad()
-  }, [])
 
   useInterval(() => {
     setState({ ...state, count: state.count - (3600 / 60) * 1000 })
@@ -121,6 +115,15 @@ export const Index = ({ name = 'kiddo' }: IndexProps) => {
             Work
           </Button>
           <Flex id='slider' align='center' direction={['row', 'row', 'column']}>
+            <Flex align='center' m={2} zIndex={100}>
+              <Text fontSize='sm' mr={2}>
+                Leverage
+              </Text>
+              <label className='switch'>
+                <input type='checkbox' />
+                <span className='slider'></span>
+              </label>
+            </Flex>
             <Flex align='center' m={2} zIndex={100}>
               <Text fontSize='sm' mr={2}>
                 Leverage
