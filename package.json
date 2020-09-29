@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "export": "npm --prefix functions run build && next build && next export",
+    "export": "npm run build-functions && next build && next export",
+    "build-functions": "npm --prefix functions install && npm --prefix functions run build",
     "start": "next start -p $PORT",
     "type-check": "tsc"
   },
