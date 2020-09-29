@@ -24,8 +24,8 @@ jobs:
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
-          name: build
-          path: build
+          name: static-build
+          path: out
   deploy:
     name: Deploy
     needs: build
@@ -36,8 +36,8 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@master
         with:
-          name: build
-          path: build
+          name: static-build
+          path: out
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@v1.3.1
         with:
