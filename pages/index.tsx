@@ -30,9 +30,9 @@ const pouch = {
   },
 }
 
-type IndexProps = { name: string }
+// type IndexProps = { name: string }
 
-export const Index = ({ name = 'anonymous' }: IndexProps) => {
+export const Index = () => {
   const [wallet, setWallet] = useState(Map())
   const [ledger, setLedger] = useState(Map())
 
@@ -55,8 +55,12 @@ export const Index = ({ name = 'anonymous' }: IndexProps) => {
   }
 
   const work = () => {
-    const newWallet = sum(wallet, Map({ [DOLLARS]: 1 }))
+    const newWallet = sum(wallet, Map({ [DOLLARS]: state.payRate * 1 }))
     setWallet(newWallet)
+    setState({
+      ...state,
+      count: (state.count / 1000 - 3600 * 8) * 1000,
+    })
   }
 
   const buyChair = () => {
@@ -71,14 +75,6 @@ export const Index = ({ name = 'anonymous' }: IndexProps) => {
 
     setWallet(newWallet)
     setLedger(newLedger)
-  }
-
-  const click = () => {
-    setState({
-      ...state,
-      netWorth: state.netWorth + state.payRate * 1,
-      count: (state.count / 1000 - 3600 * 8) * 1000,
-    })
   }
 
   return (
