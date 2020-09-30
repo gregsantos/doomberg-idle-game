@@ -14,11 +14,6 @@ const initialTime =
 
 const interval = 100
 
-const initialState = {
-  clicks: { amount: 0 },
-  auto: { cost: 10, amount: 0 },
-}
-
 // Currencies
 const DOLLARS = 'DOLLARS'
 
