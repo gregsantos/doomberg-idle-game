@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Flex, Box, Text, Button } from '@chakra-ui/core'
 import Terminal from 'react-console-emulator'
 import { Map } from 'immutable'
@@ -46,6 +46,8 @@ export const Index = () => {
     update()
   }, interval)
 
+  const terminal = useRef()
+
   const update = () => {
     setWallet(sum(wallet, ledger))
     setState({
@@ -61,6 +63,9 @@ export const Index = () => {
       ...state,
       count: (state.count / 1000 - 3600 * 8) * 1000,
     })
+    console.log(terminal.current)
+    // @ts-ignore
+    terminal.current.pushToStdout('You worked 8 hours and earned $10')
   }
 
   const buyChair = () => {
@@ -146,16 +151,23 @@ export const Index = () => {
         borderColor='green.300'
       >
         <Terminal
+          ref={terminal}
           autoFocus
+          noAutoScroll
           ignoreCommandCase
+          noEchoBack
           promptLabel={'$'}
-          welcomeMessage={'Welcome to the Doomberg terminal!'}
+          welcomeMessage={`Hey Kiddo I hope you like your present.
+          You better, these things ain't cheap!
+          `}
           style={{
             height: '75%',
             width: '100%',
             alignSelf: 'flex-start',
+            backgroundColor: 'rgba(255, 255, 255, 0.08)',
+            zIndex: 120,
           }}
-          contentStyle={{ overflow: 'scroll', maxHeight: '192px' }}
+          contentStyle={{ overflow: 'auto' }}
           commandCallback={(result) => console.log(result)}
           commands={{
             echo: {
