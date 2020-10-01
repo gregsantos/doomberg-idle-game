@@ -16,7 +16,7 @@ export default function Logo({ width, height }: LogoProps) {
       <g
         id='Styles-logo'
         stroke='none'
-        stroke-width='1'
+        strokeWidth='1'
         fill='none'
         fillRule='evenodd'
       >

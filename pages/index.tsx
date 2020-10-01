@@ -2,13 +2,17 @@ import React, { useState, useRef } from 'react'
 import { Flex, Box, Text, Button } from '@chakra-ui/core'
 import Terminal from 'react-console-emulator'
 import { Map } from 'immutable'
-import { add, sum, buy, inTheBlack, effects } from 'merchant.js'
-import Logo from '../components/Logo'
-import Newsbar from '../components/Newsbar'
-import { useInterval } from '../hooks/useInterval'
-import Counter from '../components/Counter'
+import { add, sum, buy, cost, inTheBlack, effects } from 'merchant.js'
+import Logo from 'components/Logo'
+import Newsbar from 'components/Newsbar'
+import { useInterval } from 'hooks/useInterval'
+import useLocalStorage from 'hooks/useLocalStorage'
+import Counter from 'components/Counter'
+import { whole } from 'utils/numbers'
 // import onLoad from '../utils/'
 
+// 22645 days, 543480 hrs
+// gameTime ~150hrs
 const initialTime =
   new Date().setFullYear(new Date().getFullYear() + 62) - Math.floor(Date.now())
 
@@ -21,38 +25,43 @@ const DOLLARS = 'DOLLARS'
 const pouch = {
   chair: {
     type: 'Chair',
-    cost: () => {
-      return Map({ [DOLLARS]: -10 })
+    cost: (state) => {
+      return Map({ [DOLLARS]: -10 * ((state.chairs || 1) * 1.15) })
     },
     effect: () => {
-      return Map({ [DOLLARS]: 1 })
+      return Map({ [DOLLARS]: 0.1 })
     },
   },
 }
 
-// type IndexProps = { name: string }
+type Ledger = Map<string, number>
 
 export const Index = () => {
-  const [wallet, setWallet] = useState(Map())
-  const [ledger, setLedger] = useState(Map())
+  const [wallet, setWallet] = useState<Ledger>(Map())
+  const [ledger, setLedger] = useState<Ledger>(Map())
 
   const [state, setState] = useState({
-    netWorth: 0,
     count: initialTime,
+    name: 'kiddo',
+    netWorth: 0,
     payRate: 10,
+    chairs: 0,
   })
 
+  const [savedGame, setSavedGame] = useLocalStorage<any>('name', state)
   useInterval(() => {
     update()
   }, interval)
 
-  const terminal = useRef()
+  const terminal: { current?: any } = useRef()
 
   const update = () => {
     setWallet(sum(wallet, ledger))
     setState({
       ...state,
-      count: state.count - (3600 / 60) * 1000,
+      count: state.count - (3600 * 1000) / 10,
+      // count: state.count - (3600 / 60) * 1000,
+      netWorth: sum(wallet, ledger).get(DOLLARS) || 0,
     })
   }
 
@@ -62,9 +71,8 @@ export const Index = () => {
     setState({
       ...state,
       count: (state.count / 1000 - 3600 * 8) * 1000,
+      netWorth: newWallet.get(DOLLARS) || 0,
     })
-    console.log(terminal.current)
-    // @ts-ignore
     terminal.current.pushToStdout('You worked 8 hours and earned $10')
   }
 
@@ -80,6 +88,20 @@ export const Index = () => {
 
     setWallet(newWallet)
     setLedger(newLedger)
+    setState({
+      ...state,
+      chairs: state.chairs + 1,
+    })
+  }
+
+  const getDps = () => {
+    const ledgersTotals = ledger.get(DOLLARS) || 0
+    return ledgersTotals * 10
+  }
+
+  const saveGame = () => {
+    console.log(savedGame)
+    setSavedGame(state)
   }
 
   return (
@@ -93,6 +115,9 @@ export const Index = () => {
       <header>
         <Logo width='25' height='25' />
         <h3>DOOMBERG</h3>
+        <Button zIndex={100} onClick={saveGame}>
+          Save Game
+        </Button>
       </header>
       <Box p={3} border='1px solid' borderColor='green.300'>
         <Flex
@@ -104,7 +129,7 @@ export const Index = () => {
           borderColor='green.300'
         >
           <Box color='green.300'>Net Worth</Box>
-          <Box mb={2}>$ {wallet.get(DOLLARS) || 0}</Box>
+          <Box mb={2}>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
           <Box color='green.300'>Time till Death</Box>
           <Counter timeLeft={state.count} />
           <Button
@@ -113,7 +138,7 @@ export const Index = () => {
             variantColor='green'
             variant='outline'
             zIndex={100}
-            _hover={{ bg: 'green.200' }}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
           >
             Work
           </Button>
@@ -127,16 +152,16 @@ export const Index = () => {
           border='1px solid'
           borderColor='green.300'
         >
-          <Box mb={2}>Dollars per second: {ledger.get(DOLLARS) || 0 / 5}</Box>
+          <Box mb={2}>Dollars per second: {whole(getDps())}</Box>
           <Button
             mb={3}
             onClick={buyChair}
             variantColor='green'
             variant='outline'
             zIndex={100}
-            _hover={{ bg: 'green.200' }}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
           >
-            Buy a Chair
+            {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
           </Button>
           <h1> Chairs: {wallet.get(pouch.chair.type) || 0} </h1>
         </Flex>
