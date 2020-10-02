@@ -28,7 +28,7 @@
   @include fill();
 
   //z-index: 0;
-  animation: pulse 5s linear infinite;
+  // animation: pulse 5s linear infinite;
 
   &::before {
     @include fill();
@@ -56,6 +56,12 @@
     );
     pointer-events: none;
     animation: glow 2s linear infinite;
+  }
+}
+
+@media (min-width: 1200px) {
+  #green-light {
+    animation: pulse 5s linear infinite;
   }
 }
 
