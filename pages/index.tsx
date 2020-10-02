@@ -17,7 +17,7 @@ const initialTime =
   new Date().setFullYear(new Date().getFullYear() + 62) - Math.floor(Date.now())
 
 const interval = 100
-
+const MULTIPLIER = 1.15
 // Currencies
 const DOLLARS = 'DOLLARS'
 
@@ -26,7 +26,8 @@ const pouch = {
   chair: {
     type: 'Chair',
     cost: (state) => {
-      return Map({ [DOLLARS]: -10 * ((state.chairs || 1) * 1.15) })
+      if (state.chairs === 0) return Map({ [DOLLARS]: -10 })
+      return Map({ [DOLLARS]: -(10 * (state.chairs * MULTIPLIER)) })
     },
     effect: () => {
       return Map({ [DOLLARS]: 0.1 })
@@ -39,7 +40,6 @@ type Ledger = Map<string, number>
 export const Index = () => {
   const [wallet, setWallet] = useState<Ledger>(Map())
   const [ledger, setLedger] = useState<Ledger>(Map())
-
   const [state, setState] = useState({
     count: initialTime,
     name: 'kiddo',
@@ -47,21 +47,28 @@ export const Index = () => {
     payRate: 10,
     chairs: 0,
   })
+  const [, setSavedGame] = useLocalStorage<any>('savedGame', state)
+  const terminal: { current?: any } = useRef()
 
-  const [savedGame, setSavedGame] = useLocalStorage<any>('name', state)
   useInterval(() => {
     update()
   }, interval)
 
-  const terminal: { current?: any } = useRef()
+  useInterval(() => {
+    setSavedGame(state)
+  }, interval * 300)
 
   const update = () => {
+    if (state.count === 0) {
+      alert(`YOU DIED with $ ${state.netWorth}`)
+      return
+    }
     setWallet(sum(wallet, ledger))
     setState({
       ...state,
       count: state.count - (3600 * 1000) / 10,
       // count: state.count - (3600 / 60) * 1000,
-      netWorth: sum(wallet, ledger).get(DOLLARS) || 0,
+      netWorth: whole(sum(wallet, ledger).get(DOLLARS)) || 0,
     })
   }
 
@@ -71,23 +78,24 @@ export const Index = () => {
     setState({
       ...state,
       count: (state.count / 1000 - 3600 * 8) * 1000,
-      netWorth: newWallet.get(DOLLARS) || 0,
+      netWorth: whole(newWallet.get(DOLLARS)) || 0,
     })
     terminal.current.pushToStdout('You worked 8 hours and earned $10')
   }
 
   const buyChair = () => {
-    const walletWithCostsApplied = buy(pouch.chair, wallet)
+    const walletWithCostsApplied = buy(pouch.chair, wallet, state)
     if (!inTheBlack(walletWithCostsApplied)) {
       alert("You can't afford this upgrade")
       return
     }
 
     const newWallet = add(pouch.chair, walletWithCostsApplied)
-    const newLedger = effects(Object.values(pouch), newWallet)
-
     setWallet(newWallet)
+
+    const newLedger = effects(Object.values(pouch), newWallet)
     setLedger(newLedger)
+
     setState({
       ...state,
       chairs: state.chairs + 1,
@@ -99,14 +107,9 @@ export const Index = () => {
     return ledgersTotals * 10
   }
 
-  const saveGame = () => {
-    console.log(savedGame)
-    setSavedGame(state)
-  }
-
   return (
     <Box
-      display={{ base: 'flex', md: 'grid' }}
+      display={{ base: 'flex', md: 'flex', lg: 'grid' }}
       flexDirection='column'
       gridTemplateColumns='minmax(100px, 1fr) 640px minmax(100px, 1fr)'
       gridTemplateRows='75px 1fr auto'
@@ -115,11 +118,13 @@ export const Index = () => {
       <header>
         <Logo width='25' height='25' />
         <h3>DOOMBERG</h3>
-        <Button zIndex={100} onClick={saveGame}>
-          Save Game
-        </Button>
       </header>
-      <Box p={3} border='1px solid' borderColor='green.300'>
+      <Flex
+        p={3}
+        border='1px solid'
+        borderColor='green.300'
+        direction={{ base: 'row', md: 'column' }}
+      >
         <Flex
           direction='column'
           justify='center'
@@ -144,17 +149,18 @@ export const Index = () => {
           </Button>
         </Flex>
         <Flex
+          flex={1}
           direction='column'
-          justify='center'
-          mt={3}
+          mt={{ base: 0, md: 3 }}
           padding={3}
           color='green.300'
           border='1px solid'
           borderColor='green.300'
         >
           <Box mb={2}>Dollars per second: {whole(getDps())}</Box>
+          <h1> Chairs: {wallet.get(pouch.chair.type) || 0} </h1>
           <Button
-            mb={3}
+            mt={3}
             onClick={buyChair}
             variantColor='green'
             variant='outline'
@@ -163,9 +169,8 @@ export const Index = () => {
           >
             {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
           </Button>
-          <h1> Chairs: {wallet.get(pouch.chair.type) || 0} </h1>
         </Flex>
-      </Box>
+      </Flex>
       <Flex
         flex={1}
         p={3}

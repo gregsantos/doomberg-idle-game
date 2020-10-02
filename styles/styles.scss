@@ -19,13 +19,16 @@
   --term: '> ';
 }
 
-body,
+/* body,
 html {
   width: 100%;
   height: 100%;
-}
+} */
 
 body {
+  width: 100%;
+  height: 100%;
+  overflow-y: hidden;
   background: #000;
   text-transform: uppercase;
   color: white;
@@ -79,6 +82,7 @@ header {
   align-items: center;
   justify-content: center;
   grid-column: span 3;
+  padding: 10px;
 }
 
 footer {
