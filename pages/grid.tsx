@@ -47,7 +47,13 @@ export const GridWrapper = (props) => {
   }, []) */
 
   return (
-    <Flex ref={scrollRef} direction='column' h='100vh' maxHeight='100vh'>
+    <Flex
+      ref={scrollRef}
+      direction='column'
+      h='100vh'
+      maxHeight='100vh'
+      overflow='hidden'
+    >
       <Flex
         flexBasis='80px'
         display={['none', 'flex']}
@@ -59,8 +65,8 @@ export const GridWrapper = (props) => {
         <Logo width='25' height='25' />
         <h3>DOOMBERG</h3>
       </Flex>
-      <Box flex={1}>{props.children}</Box>
-      <Box>
+      <Box flex='1'>{props.children}</Box>
+      <Box flex='none'>
         <Newsbar />
       </Box>
       <div id='screen' />
@@ -144,13 +150,11 @@ export default function RespGrid() {
     <GridWrapper>
       <Grid
         h='100%'
-        w='100%'
-        // gridAutoRows='minmax(100px, auto)'
         templateRows={[
-          '1fr minmax(auto, 200px) 1fr',
+          '2fr 300px 2fr auto',
           null,
-          'auto 100px 100px auto',
-          '200px 200px 1fr',
+          'auto 300px auto',
+          '300px 200px 1fr',
         ]}
         templateColumns={[
           '1fr 1fr',
@@ -168,7 +172,6 @@ export default function RespGrid() {
           null,
           `
           "i1 i2"
-          "m1 m2"
           "m1 m2"
           "i3 i4"
           `,
