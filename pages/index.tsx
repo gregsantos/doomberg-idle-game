@@ -3,12 +3,11 @@ import { Flex, Box, Text, Button } from '@chakra-ui/core'
 import Terminal from 'react-console-emulator'
 import { Map } from 'immutable'
 import { add, sum, buy, cost, inTheBlack, effects } from 'merchant.js'
-import Logo from 'components/Logo'
-import Newsbar from 'components/Newsbar'
 import { useInterval } from 'hooks/useInterval'
 import useLocalStorage from 'hooks/useLocalStorage'
 import Counter from 'components/Counter'
 import { whole } from 'utils/numbers'
+import { Wrapper } from './flex'
 // import onLoad from '../utils/'
 
 // 22645 days, 543480 hrs
@@ -108,24 +107,7 @@ export const Index = () => {
   }
 
   return (
-    <Box
-      display={['flex', null, null, 'flex']}
-      flexDirection={['column']}
-      h='100vh'
-      gridTemplateColumns='minmax(100px, 1fr) 640px minmax(100px, 1fr)'
-      gridTemplateRows='75px 1fr auto'
-    >
-      <Flex
-        flex={['0 0 auto']}
-        display={['none', null, 'flex']}
-        direction='column'
-        align='center'
-        justify='center'
-        p={3}
-      >
-        <Logo width='25' height='25' />
-        <h3>DOOMBERG</h3>
-      </Flex>
+    <Wrapper>
       <Flex
         flex={1}
         direction='row'
@@ -244,14 +226,7 @@ export const Index = () => {
           </Flex>
         </Flex>
       </Flex>
-      <Box flex='0 0 auto'>
-        <Newsbar />
-      </Box>
-      <div id='screen' />
-      <div id='scanline' />
-      <div id='interlace' />
-      <div id='green-light' />
-    </Box>
+    </Wrapper>
   )
 }
 

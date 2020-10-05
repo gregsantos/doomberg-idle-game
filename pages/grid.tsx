@@ -150,35 +150,29 @@ export default function RespGrid() {
     <GridWrapper>
       <Grid
         h='100%'
-        templateRows={[
-          '2fr 300px 2fr auto',
-          null,
-          'auto 300px auto',
-          '300px 200px 1fr',
-        ]}
+        templateRows={['180px 225px 1fr', null, null, '300px 200px 1fr']}
         templateColumns={[
           '1fr 1fr',
           null,
           null,
-          'minmax(100px, 1fr) minmax(640px, 1fr) minmax(100px, 1fr)',
+          'minmax(200px, 1fr) minmax(540px, 800px) minmax(200px, 1fr)',
         ]}
         templateAreas={[
           `
           "i1 i2"
           "m1 m1"
-          "m2 m2"
           "i3 i4"
           `,
           null,
           `
           "i1 i2"
-          "m1 m2"
+          "m1 i4"
           "i3 i4"
           `,
           `
-          "i1 m1 i3"
-          "i2 m1 i3"
-          "i2 m2 i4"
+          "i1 m1 i4"
+          "i2 m1 i4"
+          "i2 i3 i4"
           `,
         ]}
       >
@@ -195,16 +189,6 @@ export default function RespGrid() {
           <Box mb={2}>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
           <Box color='green.300'>Time till Death</Box>
           <Counter timeLeft={state.count} />
-          <Button
-            my={2}
-            onClick={work}
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            Work
-          </Button>
         </Flex>
         <Flex
           gridArea='i2'
@@ -215,6 +199,16 @@ export default function RespGrid() {
           border='1px solid'
           borderColor='green.300'
         >
+          <Button
+            my={2}
+            onClick={work}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            Work
+          </Button>
           <Box mb={2}>Dollars per second: {whole(getDps())}</Box>
           <h1> Chairs: {wallet.get(pouch.chair.type) || 0} </h1>
           <Button
@@ -265,12 +259,11 @@ export default function RespGrid() {
             }}
           />
         </Box>
-        <Box gridArea='m2' border='1px solid' borderColor='green.300' />
         <Flex
           gridArea='i3'
           direction='column'
-          justify='center'
-          padding={3}
+          align='center'
+          padding={2}
           color='green.300'
           border='1px solid'
           borderColor='green.300'
@@ -290,23 +283,56 @@ export default function RespGrid() {
         <Flex
           gridArea='i4'
           direction='column'
-          justify='center'
-          padding={3}
+          padding={2}
           color='green.300'
           border='1px solid'
           borderColor='green.300'
         >
-          <Flex id='slider' align='center' direction={['row', 'row', 'column']}>
-            <Flex align='center' m={2} zIndex={100}>
-              <Text fontSize='sm' mr={2}>
-                Leverage
-              </Text>
-              <label className='switch'>
-                <input type='checkbox' />
-                <span className='slider'></span>
-              </label>
-            </Flex>
-          </Flex>
+          <Button
+            my={1}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            A
+          </Button>
+          <Button
+            my={1}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            A
+          </Button>
+          <Button
+            my={1}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            A
+          </Button>
+          <Button
+            my={1}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            A
+          </Button>
+          <Button
+            my={1}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            A
+          </Button>
         </Flex>
       </Grid>
     </GridWrapper>
