@@ -26,7 +26,6 @@ html {
 }
 
 body {
-  overflow-y: hidden;
   background: #000;
   text-transform: uppercase;
   color: white;
@@ -81,6 +80,7 @@ header {
   justify-content: center;
   grid-column: span 3;
   padding: 10px;
+  height: 100px;
 }
 
 footer {

@@ -109,23 +109,32 @@ export const Index = () => {
 
   return (
     <Box
-      display={{ base: 'flex', md: 'flex', lg: 'grid' }}
-      flexDirection='column'
+      display={['flex', null, null, 'flex']}
+      flexDirection={['column']}
+      h='100vh'
       gridTemplateColumns='minmax(100px, 1fr) 640px minmax(100px, 1fr)'
       gridTemplateRows='75px 1fr auto'
-      minHeight='100vh'
     >
-      <header>
+      <Flex
+        flex={['0 0 auto']}
+        display={['none', null, 'flex']}
+        direction='column'
+        align='center'
+        justify='center'
+        p={3}
+      >
         <Logo width='25' height='25' />
         <h3>DOOMBERG</h3>
-      </header>
+      </Flex>
       <Flex
+        flex={1}
+        direction='row'
         p={3}
         border='1px solid'
         borderColor='green.300'
-        direction={{ base: 'row', md: 'column' }}
       >
         <Flex
+          flex='50%'
           direction='column'
           justify='center'
           padding={3}
@@ -149,9 +158,8 @@ export const Index = () => {
           </Button>
         </Flex>
         <Flex
-          flex={1}
+          flex='50%'
           direction='column'
-          mt={{ base: 0, md: 3 }}
           padding={3}
           color='green.300'
           border='1px solid'
@@ -172,7 +180,7 @@ export const Index = () => {
         </Flex>
       </Flex>
       <Flex
-        flex={1}
+        flex={['0 0 250px', '0 0 250px']}
         p={3}
         justify='center'
         align='center'
@@ -191,13 +199,12 @@ export const Index = () => {
           You better, these things ain't cheap!
           `}
           style={{
-            height: '75%',
+            height: '200px',
             width: '100%',
-            alignSelf: 'flex-start',
             backgroundColor: 'rgba(255, 255, 255, 0.08)',
             zIndex: 120,
           }}
-          contentStyle={{ overflow: 'auto' }}
+          contentStyle={{ overflowY: 'scroll' }}
           commandCallback={(result) => console.log(result)}
           commands={{
             echo: {
@@ -209,18 +216,13 @@ export const Index = () => {
             },
           }}
         />
-        <Flex
-          flex={1}
-          width='100%'
-          mt={3}
-          p={3}
-          justify='center'
-          align='center'
-          border='1px solid'
-          borderColor='green.300'
-        ></Flex>
       </Flex>
-      <Box p={3} border='1px solid' borderColor='green.300'>
+      <Flex
+        flex={['0 0 auto']}
+        p={3}
+        border='1px solid'
+        borderColor='green.300'
+      >
         <Flex
           direction='column'
           justify='center'
@@ -241,10 +243,10 @@ export const Index = () => {
             </Flex>
           </Flex>
         </Flex>
-      </Box>
-      <footer>
+      </Flex>
+      <Box flex='0 0 auto'>
         <Newsbar />
-      </footer>
+      </Box>
       <div id='screen' />
       <div id='scanline' />
       <div id='interlace' />
