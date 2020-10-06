@@ -47,13 +47,7 @@ export const Wrapper = (props) => {
   }, []) */
 
   return (
-    <Flex
-      ref={scrollRef}
-      direction='column'
-      h='100vh'
-      maxHeight='100vh'
-      overflow='hidden'
-    >
+    <Flex ref={scrollRef} direction='column' h='100vh'>
       <Flex
         flexBasis='80px'
         display={['none', 'flex']}
@@ -66,7 +60,7 @@ export const Wrapper = (props) => {
         <h3>DOOMBERG</h3>
       </Flex>
       <Box flex='1'>{props.children}</Box>
-      <Box flex='none'>
+      <Box>
         <Newsbar />
       </Box>
       <div id='screen' />
@@ -199,6 +193,7 @@ export default function RespGrid() {
           h={['250px', '400px', '400px', '100%']}
           p={3}
           border='1px solid'
+          bg='blue.300'
           borderColor='green.300'
         >
           <Terminal
@@ -216,7 +211,7 @@ export default function RespGrid() {
               backgroundColor: 'rgba(255, 255, 255, 0.08)',
               zIndex: 120,
             }}
-            contentStyle={{ overflow: 'scroll' }}
+            contentStyle={{ overflow: 'auto' }}
             commandCallback={(result) => console.log(result)}
             commands={{
               echo: {
@@ -233,7 +228,6 @@ export default function RespGrid() {
           flex={['1', '50%', '0 0 50%']}
           direction='column'
           justify='center'
-          padding={3}
           color='green.300'
           bg='red.300'
           border='1px solid'
@@ -253,7 +247,6 @@ export default function RespGrid() {
         </Flex>
         <Flex
           flex={1}
-          h={['65%', '50%', null, '100%']}
           direction='column'
           justify='center'
           padding={3}
