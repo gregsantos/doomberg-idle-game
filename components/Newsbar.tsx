@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { Box } from '@chakra-ui/core'
+
 import useSWR from 'swr'
 
 const fetcher = async (url: string) => {
@@ -38,9 +40,9 @@ const Newsbar = () => {
   )
 
   return (
-    <div className='newsbar-wrapper'>
-      <div className='newsbar-marquee'>
-        <div className='newsbar-collection'>
+    <Box w='100%' h='2.5rem' m='0 auto 0'>
+      <Box overflow='hidden' whiteSpace='nowrap'>
+        <Box className='newsbar-collection'>
           {data &&
             data.articles &&
             data.articles.map((story: Story, id: number) => {
@@ -53,9 +55,9 @@ const Newsbar = () => {
                 ></Story>
               )
             })}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   )
 }
 

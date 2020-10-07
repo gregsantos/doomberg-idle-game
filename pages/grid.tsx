@@ -38,22 +38,8 @@ const pouch = {
 type Ledger = Map<string, number>
 
 export const GridWrapper = (props) => {
-  const scrollRef = useRef()
-
-  /*   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = 0
-    }
-  }, []) */
-
   return (
-    <Flex
-      ref={scrollRef}
-      direction='column'
-      h='100vh'
-      maxHeight='100vh'
-      overflow='hidden'
-    >
+    <Flex direction='column' minHeight='100vh' overflow='auto'>
       <Flex
         flexBasis='80px'
         display={['none', 'flex']}
@@ -66,13 +52,7 @@ export const GridWrapper = (props) => {
         <h3>DOOMBERG</h3>
       </Flex>
       <Box flex='1'>{props.children}</Box>
-      <Box flex='none'>
-        <Newsbar />
-      </Box>
-      <div id='screen' />
-      <div id='scanline' />
-      <div id='interlace' />
-      <div id='green-light' />
+      <Newsbar />
     </Flex>
   )
 }
@@ -147,32 +127,34 @@ export default function RespGrid() {
     return ledgersTotals * 10
   }
   return (
-    <GridWrapper>
+    <>
+      <div id='screen' />
+      <div id='scanline' />
+      <div id='interlace' />
+      <div id='green-light' />
       <Grid
-        h='100%'
-        templateRows={['180px 225px 1fr', null, null, '300px 200px 1fr']}
-        templateColumns={[
-          '1fr 1fr',
-          null,
-          null,
-          'minmax(200px, 1fr) minmax(540px, 800px) minmax(200px, 1fr)',
-        ]}
+        minHeight='100vh'
+        templateRows='auto 300px 1fr auto'
+        templateColumns={['repeat(2, 1fr)', null, null, '1fr 600px 1fr']}
         templateAreas={[
           `
           "i1 i2"
           "m1 m1"
           "i3 i4"
+          "nb nb"
           `,
           null,
           `
-          "i1 i2"
-          "m1 i4"
-          "i3 i4"
+          "i1 m1"
+          "i2 m1"
+          "i4 i3"
+          "nb nb"
           `,
           `
           "i1 m1 i4"
           "i2 m1 i4"
           "i2 i3 i4"
+          "nb nb nb"
           `,
         ]}
       >
@@ -334,7 +316,10 @@ export default function RespGrid() {
             A
           </Button>
         </Flex>
+        <Box gridArea='nb'>
+          <Newsbar />
+        </Box>
       </Grid>
-    </GridWrapper>
+    </>
   )
 }
