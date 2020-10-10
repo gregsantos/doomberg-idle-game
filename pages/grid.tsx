@@ -39,19 +39,21 @@ type Ledger = Map<string, number>
 
 export const GridWrapper = (props) => {
   return (
-    <Flex direction='column' minHeight='100vh' overflow='auto'>
+    <Flex direction='column' h='100vh'>
       <Flex
-        flexBasis='80px'
+        flexBasis='30px'
         display={['none', 'flex']}
         direction='column'
         align='center'
         justify='center'
-        p={3}
+        p={2}
       >
         <Logo width='25' height='25' />
         <h3>DOOMBERG</h3>
       </Flex>
-      <Box flex='1'>{props.children}</Box>
+      <Box flex='1' overflow='auto'>
+        {props.children}
+      </Box>
       <Newsbar />
     </Flex>
   )
@@ -127,34 +129,35 @@ export default function RespGrid() {
     return ledgersTotals * 10
   }
   return (
-    <>
+    <GridWrapper>
       <div id='screen' />
       <div id='scanline' />
       <div id='interlace' />
       <div id='green-light' />
       <Grid
-        minHeight='100vh'
-        templateRows='auto 300px 1fr auto'
-        templateColumns={['repeat(2, 1fr)', null, null, '1fr 600px 1fr']}
+        width='100%'
+        height='100%'
+        // templateColumns={['repeat(2, 1fr)', null, null, '1fr 600px 1fr']}
         templateAreas={[
           `
-          "i1 i2"
+          "i1 i1"
           "m1 m1"
-          "i3 i4"
-          "nb nb"
+          "i3 i4"       
           `,
-          null,
+          `
+          "i1 i4"
+          "m1 i4"
+          "m1 i3"       
+          `,
           `
           "i1 m1"
-          "i2 m1"
           "i4 i3"
-          "nb nb"
+          "i4 i3"
           `,
           `
           "i1 m1 i4"
-          "i2 m1 i4"
-          "i2 i3 i4"
-          "nb nb nb"
+          "i3 i3 i4"
+          "i3 i3 i4"
           `,
         ]}
       >
@@ -167,20 +170,13 @@ export default function RespGrid() {
           border='1px solid'
           borderColor='green.300'
         >
-          <Box color='green.300'>Net Worth</Box>
-          <Box mb={2}>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
           <Box color='green.300'>Time till Death</Box>
           <Counter timeLeft={state.count} />
-        </Flex>
-        <Flex
-          gridArea='i2'
-          flex={1}
-          direction='column'
-          padding={3}
-          color='green.300'
-          border='1px solid'
-          borderColor='green.300'
-        >
+          <Box mt={2} color='green.300'>
+            Net Worth
+          </Box>
+          <Box mb={2}>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
+          <Box mb={2}>Dollars per second: {whole(getDps())}</Box>
           <Button
             my={2}
             onClick={work}
@@ -190,18 +186,6 @@ export default function RespGrid() {
             _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
           >
             Work
-          </Button>
-          <Box mb={2}>Dollars per second: {whole(getDps())}</Box>
-          <h1> Chairs: {wallet.get(pouch.chair.type) || 0} </h1>
-          <Button
-            mt={3}
-            onClick={buyChair}
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
           </Button>
         </Flex>
         <Box
@@ -265,13 +249,25 @@ export default function RespGrid() {
         <Flex
           gridArea='i4'
           direction='column'
-          padding={2}
+          justify='space-evenly'
+          padding={[1, 2]}
           color='green.300'
           border='1px solid'
           borderColor='green.300'
+          overflow='auto'
         >
           <Button
-            my={1}
+            mb={[1]}
+            onClick={buyChair}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
+          </Button>
+          <Button
+            mb={[1]}
             variantColor='green'
             variant='outline'
             zIndex={100}
@@ -280,7 +276,7 @@ export default function RespGrid() {
             A
           </Button>
           <Button
-            my={1}
+            mb={1}
             variantColor='green'
             variant='outline'
             zIndex={100}
@@ -289,7 +285,7 @@ export default function RespGrid() {
             A
           </Button>
           <Button
-            my={1}
+            mb={1}
             variantColor='green'
             variant='outline'
             zIndex={100}
@@ -298,16 +294,6 @@ export default function RespGrid() {
             A
           </Button>
           <Button
-            my={1}
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            A
-          </Button>
-          <Button
-            my={1}
             variantColor='green'
             variant='outline'
             zIndex={100}
@@ -316,10 +302,7 @@ export default function RespGrid() {
             A
           </Button>
         </Flex>
-        <Box gridArea='nb'>
-          <Newsbar />
-        </Box>
       </Grid>
-    </>
+    </GridWrapper>
   )
 }
