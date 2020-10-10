@@ -136,8 +136,13 @@ export default function RespGrid() {
       <div id='green-light' />
       <Grid
         height='100%'
-        // templateRows={['minmax(mincontent, 60%) 1fr']}
-        // templateColumns={['repeat(2, 1fr)', null, null, '1fr 600px 1fr']}
+        templateRows={[
+          'minmax(mincontent, 60%) 1fr',
+          '1fr 240px 240px',
+          '240px 240px 1fr',
+          '240px 240px 1fr',
+        ]}
+        templateColumns={['repeat(2, 1fr)', null, null, '1fr 600px 1fr']}
         templateAreas={[
           `
           "i1 i1"
@@ -145,13 +150,13 @@ export default function RespGrid() {
           "i3 i4"       
           `,
           `
-          "i1 i4"
-          "m1 i4"
-          "m1 i3"       
+          "i1 i3 i4"
+          "m1 m1 i4"
+          "m1 m1 i4"       
           `,
           `
           "i1 m1"
-          "i4 i3"
+          "i4 m1"
           "i4 i3"
           `,
           `
@@ -249,11 +254,11 @@ export default function RespGrid() {
           gridArea='i4'
           direction='column'
           justify='space-evenly'
-          padding={[1, 2]}
+          padding={[1, 2, null, 3]}
           color='green.300'
           border='1px solid'
           borderColor='green.300'
-          overflow='auto'
+          overflowY='auto'
         >
           <Button
             mb={[1]}
