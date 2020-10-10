@@ -51,7 +51,7 @@ export const GridWrapper = (props) => {
         <Logo width='25' height='25' />
         <h3>DOOMBERG</h3>
       </Flex>
-      <Box flex='1' overflow='auto'>
+      <Box flex='1' overflow='scroll'>
         {props.children}
       </Box>
       <Newsbar />
@@ -135,8 +135,8 @@ export default function RespGrid() {
       <div id='interlace' />
       <div id='green-light' />
       <Grid
-        width='100%'
         height='100%'
+        // templateRows={['minmax(mincontent, 60%) 1fr']}
         // templateColumns={['repeat(2, 1fr)', null, null, '1fr 600px 1fr']}
         templateAreas={[
           `
@@ -156,8 +156,8 @@ export default function RespGrid() {
           `,
           `
           "i1 m1 i4"
-          "i3 i3 i4"
-          "i3 i3 i4"
+          "i1 m1 i4"
+          "i3 i3 i3"
           `,
         ]}
       >
@@ -207,7 +207,6 @@ export default function RespGrid() {
           `}
             style={{
               height: '100%',
-              //maxHeight: '300px',
               minHeight: '0px',
               backgroundColor: 'rgba(255, 255, 255, 0.08)',
               zIndex: 120,
