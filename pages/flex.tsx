@@ -259,53 +259,7 @@ export default function GridTwo() {
           border='1px solid'
           borderColor='green.300'
           overflow='auto'
-        >
-          <Button
-            mb={[1]}
-            onClick={buyChair}
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
-          </Button>
-          <Button
-            mb={[1]}
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            A
-          </Button>
-          <Button
-            mb={1}
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            A
-          </Button>
-          <Button
-            mb={1}
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            A
-          </Button>
-          <Button
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            A
-          </Button>
-        </Flex>
+        ></Flex>
       </Grid>
     </GridWrapper>
   )
