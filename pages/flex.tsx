@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
-import { Flex, Box, Grid, Text, Button } from '@chakra-ui/core'
+import { Flex, Box, Grid, Button } from '@chakra-ui/core'
 import Terminal from 'react-console-emulator'
 import { Map } from 'immutable'
-import { add, sum, buy, cost, inTheBlack, effects } from 'merchant.js'
+import { add, sum, buy, inTheBlack, effects } from 'merchant.js'
 import Logo from 'components/Logo'
 import Newsbar from 'components/Newsbar'
 import { useInterval } from 'hooks/useInterval'
@@ -237,19 +237,7 @@ export default function GridTwo() {
           color='green.300'
           border='1px solid'
           borderColor='green.300'
-        >
-          <Flex id='slider' align='center' direction={['row', 'row', 'column']}>
-            <Flex align='center' m={2} zIndex={100}>
-              <Text fontSize='sm' mr={2}>
-                Leverage
-              </Text>
-              <label className='switch'>
-                <input type='checkbox' />
-                <span className='slider'></span>
-              </label>
-            </Flex>
-          </Flex>
-        </Flex>
+        ></Flex>
         <Flex
           gridArea='i4'
           direction='column'
