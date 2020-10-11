@@ -7,7 +7,8 @@ import { useInterval } from 'hooks/useInterval'
 import useLocalStorage from 'hooks/useLocalStorage'
 import Counter from 'components/Counter'
 import { whole } from 'utils/numbers'
-import { Wrapper } from './flex'
+import Newsbar from 'components/Newsbar'
+import Logo from 'components/Logo'
 // import onLoad from '../utils/'
 
 // 22645 days, 543480 hrs
@@ -35,6 +36,32 @@ const pouch = {
 }
 
 type Ledger = Map<string, number>
+
+export const Wrapper = (props) => {
+  return (
+    <Flex direction='column' h='100vh'>
+      <div id='screen' />
+      <div id='scanline' />
+      <div id='interlace' />
+      <div id='green-light' />
+      <Flex
+        flexBasis='30px'
+        display={['none', 'flex']}
+        direction='column'
+        align='center'
+        justify='center'
+        p={2}
+      >
+        <Logo width='25' height='25' />
+        <h3>DOOMBERG</h3>
+      </Flex>
+      <Box flex='1' overflow='scroll'>
+        {props.children}
+      </Box>
+      <Newsbar />
+    </Flex>
+  )
+}
 
 export const Index = () => {
   const [wallet, setWallet] = useState<Ledger>(Map())

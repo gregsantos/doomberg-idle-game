@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Flex, Box, Text, Button } from '@chakra-ui/core'
+import { Flex, Box, Grid, Text, Button } from '@chakra-ui/core'
 import Terminal from 'react-console-emulator'
 import { Map } from 'immutable'
 import { add, sum, buy, cost, inTheBlack, effects } from 'merchant.js'
@@ -37,41 +37,33 @@ const pouch = {
 
 type Ledger = Map<string, number>
 
-export const Wrapper = (props) => {
-  const scrollRef = useRef()
-
-  /*   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = 0
-    }
-  }, []) */
-
+export const GridWrapper = (props) => {
   return (
-    <Flex ref={scrollRef} direction='column' h='100vh'>
-      <Flex
-        flexBasis='80px'
-        display={['none', 'flex']}
-        direction='column'
-        align='center'
-        justify='center'
-        p={3}
-      >
-        <Logo width='25' height='25' />
-        <h3>DOOMBERG</h3>
-      </Flex>
-      <Box flex='1'>{props.children}</Box>
-      <Box>
-        <Newsbar />
-      </Box>
+    <Flex direction='column' h='100vh'>
       <div id='screen' />
       <div id='scanline' />
       <div id='interlace' />
       <div id='green-light' />
+      <Flex
+        flexBasis='30px'
+        display={['none', 'flex']}
+        direction='column'
+        align='center'
+        justify='center'
+        p={2}
+      >
+        <Logo width='25' height='25' />
+        <h3>DOOMBERG</h3>
+      </Flex>
+      <Box overflow='scroll' h='100%'>
+        {props.children}
+      </Box>
+      <Newsbar />
     </Flex>
   )
 }
 
-export default function RespGrid() {
+export default function GridTwo() {
   const [wallet, setWallet] = useState<Ledger>(Map())
   const [ledger, setLedger] = useState<Ledger>(Map())
   const [state, setState] = useState({
@@ -141,10 +133,41 @@ export default function RespGrid() {
     return ledgersTotals * 10
   }
   return (
-    <Wrapper>
-      <Flex direction={['row', null, null, 'column']} wrap='wrap' h='100%'>
+    <GridWrapper>
+      <Grid
+        height='100%'
+        templateRows={[
+          'minmax(max-content, min-content) 1fr',
+          '1fr 240px 240px',
+          '240px 240px 1fr',
+          '240px 240px 1fr',
+        ]}
+        templateColumns={['repeat(2, 1fr)', null, null, '1fr 600px 1fr']}
+        templateAreas={[
+          `
+          "i1 i1"
+          "m1 m1"
+          "i3 i4"       
+          `,
+          `
+          "i1 i3 i4"
+          "m1 m1 i4"
+          "m1 m1 i4"       
+          `,
+          `
+          "i1 m1"
+          "i4 m1"
+          "i4 i3"
+          `,
+          `
+          "i1 m1 i4"
+          "i1 m1 i4"
+          "i3 i3 i3"
+          `,
+        ]}
+      >
         <Flex
-          flex={['50%']}
+          gridArea='i1'
           direction='column'
           justify='flex-start'
           padding={3}
@@ -152,10 +175,13 @@ export default function RespGrid() {
           border='1px solid'
           borderColor='green.300'
         >
-          <Box color='green.300'>Net Worth</Box>
-          <Box mb={2}>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
           <Box color='green.300'>Time till Death</Box>
           <Counter timeLeft={state.count} />
+          <Box mt={2} color='green.300'>
+            Net Worth
+          </Box>
+          <Box mb={2}>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
+          <Box mb={2}>Dollars per second: {whole(getDps())}</Box>
           <Button
             my={2}
             onClick={work}
@@ -167,33 +193,12 @@ export default function RespGrid() {
             Work
           </Button>
         </Flex>
-        <Flex
-          flex={['50%']}
-          direction='column'
-          padding={3}
-          color='green.300'
-          border='1px solid'
-          borderColor='green.300'
-        >
-          <Box mb={2}>Dollars per second: {whole(getDps())}</Box>
-          <h1> Chairs: {wallet.get(pouch.chair.type) || 0} </h1>
-          <Button
-            mt={3}
-            onClick={buyChair}
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
-          </Button>
-        </Flex>
         <Box
-          flex={['100%', '50%', '0 0 50%']}
-          h={['250px', '400px', '400px', '100%']}
+          gridArea='m1'
+          minHeight='0'
+          minWidth='0'
           p={3}
           border='1px solid'
-          bg='blue.300'
           borderColor='green.300'
         >
           <Terminal
@@ -211,7 +216,7 @@ export default function RespGrid() {
               backgroundColor: 'rgba(255, 255, 255, 0.08)',
               zIndex: 120,
             }}
-            contentStyle={{ overflow: 'auto' }}
+            contentStyle={{ overflow: 'scroll' }}
             commandCallback={(result) => console.log(result)}
             commands={{
               echo: {
@@ -225,11 +230,11 @@ export default function RespGrid() {
           />
         </Box>
         <Flex
-          flex={['1', '50%', '0 0 50%']}
+          gridArea='i3'
           direction='column'
-          justify='center'
+          align='center'
+          padding={2}
           color='green.300'
-          bg='red.300'
           border='1px solid'
           borderColor='green.300'
         >
@@ -246,28 +251,62 @@ export default function RespGrid() {
           </Flex>
         </Flex>
         <Flex
-          flex={1}
+          gridArea='i4'
           direction='column'
-          justify='center'
-          padding={3}
+          justify='space-evenly'
+          padding={[1, 2, null, 3]}
           color='green.300'
-          bg='blue.400'
           border='1px solid'
           borderColor='green.300'
+          overflow='auto'
         >
-          <Flex id='slider' align='center' direction={['row', 'row', 'column']}>
-            <Flex align='center' m={2} zIndex={100}>
-              <Text fontSize='sm' mr={2}>
-                Leverage
-              </Text>
-              <label className='switch'>
-                <input type='checkbox' />
-                <span className='slider'></span>
-              </label>
-            </Flex>
-          </Flex>
+          <Button
+            mb={[1]}
+            onClick={buyChair}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
+          </Button>
+          <Button
+            mb={[1]}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            A
+          </Button>
+          <Button
+            mb={1}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            A
+          </Button>
+          <Button
+            mb={1}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            A
+          </Button>
+          <Button
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            A
+          </Button>
         </Flex>
-      </Flex>
-    </Wrapper>
+      </Grid>
+    </GridWrapper>
   )
 }
