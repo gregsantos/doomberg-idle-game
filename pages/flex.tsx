@@ -5,6 +5,7 @@ import { Map } from 'immutable'
 import { add, sum, buy, cost, inTheBlack, effects } from 'merchant.js'
 import Logo from 'components/Logo'
 import Newsbar from 'components/Newsbar'
+import Slider from 'components/Slider'
 import { useInterval } from 'hooks/useInterval'
 import useLocalStorage from 'hooks/useLocalStorage'
 import Counter from 'components/Counter'
@@ -45,7 +46,6 @@ export const GridWrapper = (props) => {
       <div id='interlace' />
       <div id='green-light' />
       <Flex
-        flexBasis='30px'
         display={['none', 'flex']}
         direction='column'
         align='center'
@@ -55,7 +55,7 @@ export const GridWrapper = (props) => {
         <Logo width='25' height='25' />
         <h3>DOOMBERG</h3>
       </Flex>
-      <Box overflow='scroll' h='100%'>
+      <Box overflow='auto' h='100%'>
         {props.children}
       </Box>
       <Newsbar />
@@ -136,11 +136,13 @@ export default function GridTwo() {
     <GridWrapper>
       <Grid
         height='100%'
+        overflow='scroll'
         templateRows={[
-          'minmax(max-content, min-content) 1fr',
-          '1fr 240px 240px',
+          'auto minmax(min-content, max-content) 1fr',
+          '1fr minmax(min-content, 1fr)',
+          /*           '1fr 240px 240px',
           '240px 240px 1fr',
-          '240px 240px 1fr',
+          '240px 240px 1fr', */
         ]}
         templateColumns={['repeat(2, 1fr)', null, null, '1fr 600px 1fr']}
         templateAreas={[
@@ -152,15 +154,12 @@ export default function GridTwo() {
           `
           "i1 i3 i4"
           "m1 m1 i4"
-          "m1 m1 i4"       
           `,
           `
           "i1 m1"
-          "i4 m1"
           "i4 i3"
           `,
           `
-          "i1 m1 i4"
           "i1 m1 i4"
           "i3 i3 i3"
           `,
@@ -169,7 +168,6 @@ export default function GridTwo() {
         <Flex
           gridArea='i1'
           direction='column'
-          justify='flex-start'
           padding={3}
           color='green.300'
           border='1px solid'
@@ -195,8 +193,9 @@ export default function GridTwo() {
         </Flex>
         <Box
           gridArea='m1'
-          minHeight='0'
-          minWidth='0'
+          /*           minHeight='0'
+          minWidth='0' */
+          h={['250px', '380px', null, '460px']}
           p={3}
           border='1px solid'
           borderColor='green.300'
@@ -237,7 +236,9 @@ export default function GridTwo() {
           color='green.300'
           border='1px solid'
           borderColor='green.300'
-        ></Flex>
+        >
+          <Slider id='Leverage' />
+        </Flex>
         <Flex
           gridArea='i4'
           direction='column'
