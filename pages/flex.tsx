@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { Flex, Box, Grid, Button } from '@chakra-ui/core'
 import Terminal from 'react-console-emulator'
 import { Map } from 'immutable'
-import { add, sum, buy, inTheBlack, effects } from 'merchant.js'
+import { add, sum, buy, cost, inTheBlack, effects } from 'merchant.js'
 import Logo from 'components/Logo'
 import Newsbar from 'components/Newsbar'
 import { useInterval } from 'hooks/useInterval'
@@ -247,7 +247,18 @@ export default function GridTwo() {
           border='1px solid'
           borderColor='green.300'
           overflow='auto'
-        ></Flex>
+        >
+          <Button
+            mb={[1]}
+            onClick={buyChair}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
+          </Button>
+        </Flex>
       </Grid>
     </GridWrapper>
   )
