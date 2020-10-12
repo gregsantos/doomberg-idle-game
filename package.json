@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "next",
-    "build": "next build",
+    "build": "npm run build-functions && next build",
     "export": "npm run build-functions && next build && next export",
     "build-functions": "npm --prefix functions install && npm --prefix functions run build",
     "start": "next start -p $PORT",

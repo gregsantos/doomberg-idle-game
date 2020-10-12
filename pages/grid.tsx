@@ -130,10 +130,6 @@ export default function RespGrid() {
   }
   return (
     <GridWrapper>
-      <div id='screen' />
-      <div id='scanline' />
-      <div id='interlace' />
-      <div id='green-light' />
       <Grid
         height='100%'
         templateRows={[

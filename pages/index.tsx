@@ -40,10 +40,6 @@ type Ledger = Map<string, number>
 export const Wrapper = (props) => {
   return (
     <Flex direction='column' h='100vh'>
-      <div id='screen' />
-      <div id='scanline' />
-      <div id='interlace' />
-      <div id='green-light' />
       <Flex
         flexBasis='30px'
         display={['none', 'flex']}

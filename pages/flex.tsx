@@ -7,6 +7,7 @@ import Logo from 'components/Logo'
 import Newsbar from 'components/Newsbar'
 import Slider from 'components/Slider'
 import { useInterval } from 'hooks/useInterval'
+import useWindowSize from 'hooks/useWindowSize'
 import useLocalStorage from 'hooks/useLocalStorage'
 import Counter from 'components/Counter'
 import { whole } from 'utils/numbers'
@@ -39,12 +40,10 @@ const pouch = {
 type Ledger = Map<string, number>
 
 export const GridWrapper = (props) => {
+  const { width, height } = useWindowSize()
+
   return (
-    <Flex direction='column' h='100vh'>
-      <div id='screen' />
-      <div id='scanline' />
-      <div id='interlace' />
-      <div id='green-light' />
+    <Flex direction='column' h={height} w={width}>
       <Flex
         display={['none', 'flex']}
         direction='column'
@@ -55,9 +54,7 @@ export const GridWrapper = (props) => {
         <Logo width='25' height='25' />
         <h3>DOOMBERG</h3>
       </Flex>
-      <Box overflow='auto' h='100%'>
-        {props.children}
-      </Box>
+      <Box flex={1}>{props.children}</Box>
       <Newsbar />
     </Flex>
   )
@@ -135,16 +132,21 @@ export default function GridTwo() {
   return (
     <GridWrapper>
       <Grid
-        height='100%'
-        overflow='scroll'
+        h='100%'
         templateRows={[
           'auto minmax(min-content, max-content) 1fr',
-          '1fr minmax(min-content, 1fr)',
+          '1fr auto',
+          'auto 1fr',
           /*           '1fr 240px 240px',
           '240px 240px 1fr',
           '240px 240px 1fr', */
         ]}
-        templateColumns={['repeat(2, 1fr)', null, null, '1fr 600px 1fr']}
+        templateColumns={[
+          'repeat(2, 1fr)',
+          'repeat(2, 1fr) minmax(200px, 1fr)',
+          'repeat(2, 1fr)',
+          '1fr 600px 1fr',
+        ]}
         templateAreas={[
           `
           "i1 i1"
