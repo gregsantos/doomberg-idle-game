@@ -1,14 +1,16 @@
 import React, { useState, useRef } from 'react'
-import { Flex, Box, Text, Button } from '@chakra-ui/core'
+import { Flex, Box, Grid, Button } from '@chakra-ui/core'
 import Terminal from 'react-console-emulator'
 import { Map } from 'immutable'
 import { add, sum, buy, cost, inTheBlack, effects } from 'merchant.js'
+import Logo from 'components/Logo'
+import Newsbar from 'components/Newsbar'
+import Slider from 'components/Slider'
 import { useInterval } from 'hooks/useInterval'
+import useWindowSize from 'hooks/useWindowSize'
 import useLocalStorage from 'hooks/useLocalStorage'
 import Counter from 'components/Counter'
 import { whole } from 'utils/numbers'
-import Newsbar from 'components/Newsbar'
-import Logo from 'components/Logo'
 // import onLoad from '../utils/'
 
 // 22645 days, 543480 hrs
@@ -37,11 +39,18 @@ const pouch = {
 
 type Ledger = Map<string, number>
 
-export const Wrapper = (props) => {
+export const GridWrapper = (props) => {
+  const { width, height } = useWindowSize()
+
   return (
-    <Flex direction='column' h='100vh'>
+    <Flex
+      direction='column'
+      h={height}
+      w={width}
+      maxHeight={height}
+      overflow='auto'
+    >
       <Flex
-        flexBasis='30px'
         display={['none', 'flex']}
         direction='column'
         align='center'
@@ -51,15 +60,13 @@ export const Wrapper = (props) => {
         <Logo width='25' height='25' />
         <h3>DOOMBERG</h3>
       </Flex>
-      <Box flex='1' overflow='scroll'>
-        {props.children}
-      </Box>
+      <Box flex={1}>{props.children}</Box>
       <Newsbar />
     </Flex>
   )
 }
 
-export const Index = () => {
+export default function Index() {
   const [wallet, setWallet] = useState<Ledger>(Map())
   const [ledger, setLedger] = useState<Ledger>(Map())
   const [state, setState] = useState({
@@ -128,29 +135,52 @@ export const Index = () => {
     const ledgersTotals = ledger.get(DOLLARS) || 0
     return ledgersTotals * 10
   }
-
   return (
-    <Wrapper>
-      <Flex
-        flex={1}
-        direction='row'
-        p={3}
-        border='1px solid'
-        borderColor='green.300'
+    <GridWrapper>
+      <Grid
+        h='100%'
+        templateRows={[
+          'auto 250px minmax(auto, 1fr)',
+          '380px minmax(auto, 1fr)',
+        ]}
+        templateColumns={[
+          'repeat(2, 1fr)',
+          'repeat(2, 1fr) minmax(200px, 1fr)',
+          'repeat(3, 1fr)',
+          '1fr 600px 1fr',
+        ]}
+        templateAreas={[
+          `
+          "i1 i1"
+          "m1 m1"
+          "i3 i4"       
+          `,
+          `
+          "m1 m1 m1"
+          "i1 i4 i3"
+          `,
+          null,
+          `
+          "i1 m1 i4"
+          "i1 i3 i4"
+          `,
+        ]}
       >
         <Flex
-          flex='50%'
+          gridArea='i1'
           direction='column'
-          justify='center'
           padding={3}
           color='green.300'
           border='1px solid'
           borderColor='green.300'
         >
-          <Box color='green.300'>Net Worth</Box>
-          <Box mb={2}>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
           <Box color='green.300'>Time till Death</Box>
           <Counter timeLeft={state.count} />
+          <Box mt={2} color='green.300'>
+            Net Worth
+          </Box>
+          <Box mb={2}>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
+          <Box mb={2}>Dollars per second: {whole(getDps())}</Box>
           <Button
             my={2}
             onClick={work}
@@ -162,18 +192,57 @@ export const Index = () => {
             Work
           </Button>
         </Flex>
+        <Box gridArea='m1' p={3} border='1px solid' borderColor='green.300'>
+          <Terminal
+            ref={terminal}
+            autoFocus
+            ignoreCommandCase
+            noEchoBack
+            promptLabel={'$'}
+            welcomeMessage={`Hey Kiddo I hope you like your present.
+          You better, these things ain't cheap!
+          `}
+            style={{
+              height: '100%',
+              minHeight: '0px',
+              backgroundColor: 'rgba(255, 255, 255, 0.08)',
+            }}
+            contentStyle={{ zIndex: 2, position: 'relative' }}
+            commandCallback={(result) => console.log(result)}
+            commands={{
+              echo: {
+                description: 'Echo a passed string.',
+                usage: 'echo <string>',
+                fn: function () {
+                  return `${Array.from(arguments).join(' ')}`
+                },
+              },
+            }}
+          />
+        </Box>
         <Flex
-          flex='50%'
+          gridArea='i3'
           direction='column'
-          padding={3}
+          align='center'
+          padding={2}
           color='green.300'
           border='1px solid'
           borderColor='green.300'
         >
-          <Box mb={2}>Dollars per second: {whole(getDps())}</Box>
-          <h1> Chairs: {wallet.get(pouch.chair.type) || 0} </h1>
+          <Slider id='Leverage' />
+        </Flex>
+        <Flex
+          gridArea='i4'
+          direction='column'
+          justify='space-between'
+          padding={[1, 2, null, 3]}
+          color='green.300'
+          border='1px solid'
+          borderColor='green.300'
+          overflow='auto'
+        >
           <Button
-            mt={3}
+            mb={[1]}
             onClick={buyChair}
             variantColor='green'
             variant='outline'
@@ -182,75 +251,22 @@ export const Index = () => {
           >
             {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
           </Button>
+          {['Chair', 'Shop', 'Office', 'Seat', 'Fund'].map((upgrade) => (
+            <Button
+              size='md'
+              mb={[1]}
+              onClick={buyChair}
+              variantColor='green'
+              variant='outline'
+              zIndex={100}
+              _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+              isDisabled={true}
+            >
+              {`Buy a ${upgrade} ${cost(pouch.chair, state).get(DOLLARS)}`}
+            </Button>
+          ))}
         </Flex>
-      </Flex>
-      <Flex
-        flex={['0 0 250px', '0 0 250px']}
-        p={3}
-        justify='center'
-        align='center'
-        direction='column'
-        border='1px solid'
-        borderColor='green.300'
-      >
-        <Terminal
-          ref={terminal}
-          autoFocus
-          noAutoScroll
-          ignoreCommandCase
-          noEchoBack
-          promptLabel={'$'}
-          welcomeMessage={`Hey Kiddo I hope you like your present.
-          You better, these things ain't cheap!
-          `}
-          style={{
-            height: '200px',
-            width: '100%',
-            backgroundColor: 'rgba(255, 255, 255, 0.08)',
-            zIndex: 120,
-          }}
-          contentStyle={{ overflowY: 'scroll' }}
-          commandCallback={(result) => console.log(result)}
-          commands={{
-            echo: {
-              description: 'Echo a passed string.',
-              usage: 'echo <string>',
-              fn: function () {
-                return `${Array.from(arguments).join(' ')}`
-              },
-            },
-          }}
-        />
-      </Flex>
-      <Flex
-        flex={['0 0 auto']}
-        p={3}
-        border='1px solid'
-        borderColor='green.300'
-      >
-        <Flex
-          direction='column'
-          justify='center'
-          padding={3}
-          color='green.300'
-          border='1px solid'
-          borderColor='green.300'
-        >
-          <Flex id='slider' align='center' direction={['row', 'row', 'column']}>
-            <Flex align='center' m={2} zIndex={100}>
-              <Text fontSize='sm' mr={2}>
-                Leverage
-              </Text>
-              <label className='switch'>
-                <input type='checkbox' />
-                <span className='slider'></span>
-              </label>
-            </Flex>
-          </Flex>
-        </Flex>
-      </Flex>
-    </Wrapper>
+      </Grid>
+    </GridWrapper>
   )
 }
-
-export default Index
