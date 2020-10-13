@@ -40,7 +40,7 @@ const Newsbar = () => {
   )
 
   return (
-    <Box w='100%' h='2.5rem' m='0 auto 0'>
+    <Box w='100%' h={['2.5rem', '2.5rem']} m='0 auto 0'>
       <Box overflow='hidden' whiteSpace='nowrap'>
         <Box className='newsbar-collection'>
           {data &&

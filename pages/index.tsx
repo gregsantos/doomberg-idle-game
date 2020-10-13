@@ -47,18 +47,19 @@ export const GridWrapper = (props) => {
       direction='column'
       h={height}
       w={width}
-      // maxHeight={height}
+      maxHeight={height}
       overflow='auto'
     >
       <Flex
-        display={['none', 'flex']}
+        height={['0px', '60px']}
+        display={['flex']}
         direction='column'
         align='center'
         justify='center'
         p={2}
       >
         <Logo width='25' height='25' />
-        <h3>DOOMBERG</h3>
+        <h3>D00MBER6</h3>
       </Flex>
       <Box flex={1}>{props.children}</Box>
       <Newsbar />
@@ -140,7 +141,7 @@ export default function Index() {
       <Grid
         h='100%'
         templateRows={[
-          'auto 250px minmax(auto, 1fr)',
+          '220px 250px minmax(auto, 1fr)',
           '380px minmax(auto, 1fr)',
         ]}
         templateColumns={[
@@ -169,7 +170,7 @@ export default function Index() {
         <Flex
           gridArea='i1'
           direction='column'
-          padding={3}
+          padding={[1, 2, 3]}
           color='green.300'
           border='1px solid'
           borderColor='green.300'
