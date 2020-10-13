@@ -261,6 +261,20 @@ export default function GridTwo() {
           >
             {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
           </Button>
+          {['Shop', 'Office', 'Seat', 'Fund'].map((upgrade) => (
+            <Button
+              size='md'
+              mb={[1]}
+              onClick={buyChair}
+              variantColor='green'
+              variant='outline'
+              zIndex={100}
+              _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+              isDisabled={true}
+            >
+              {`Buy a ${upgrade} ${cost(pouch.chair, state).get(DOLLARS)}`}
+            </Button>
+          ))}
         </Flex>
       </Grid>
     </GridWrapper>

@@ -233,6 +233,8 @@ export default function Index() {
         </Flex>
         <Flex
           gridArea='i4'
+          minHeight='0'
+          minWidth='0'
           direction='column'
           justify='space-between'
           padding={[1, 2, null, 3]}
@@ -251,7 +253,7 @@ export default function Index() {
           >
             {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
           </Button>
-          {[  'Shop', 'Office', 'Seat', 'Fund'].map((upgrade) => (
+          {['Shop', 'Office', 'Seat', 'Fund'].map((upgrade) => (
             <Button
               size='md'
               mb={[1]}
