@@ -47,7 +47,7 @@ export const GridWrapper = (props) => {
       direction='column'
       h={height}
       w={width}
-      maxHeight={height}
+      // maxHeight={height}
       overflow='auto'
     >
       <Flex
@@ -251,7 +251,7 @@ export default function Index() {
           >
             {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
           </Button>
-          {['Chair', 'Shop', 'Office', 'Seat', 'Fund'].map((upgrade) => (
+          {[  'Shop', 'Office', 'Seat', 'Fund'].map((upgrade) => (
             <Button
               size='md'
               mb={[1]}
