@@ -43,13 +43,7 @@ export const GridWrapper = (props) => {
   const { width, height } = useWindowSize()
 
   return (
-    <Flex
-      direction='column'
-      h={height}
-      w={width}
-      maxHeight={height}
-      overflow='auto'
-    >
+    <Flex direction='column' h={height} w={width} maxHeight={height}>
       <Flex
         height={['0px', '60px']}
         display={['flex']}
@@ -61,7 +55,9 @@ export const GridWrapper = (props) => {
         <Logo width='25' height='25' />
         <h3>D00MBER6</h3>
       </Flex>
-      <Box flex={1}>{props.children}</Box>
+      <Box flex={1} overflow='auto'>
+        {props.children}
+      </Box>
       <Newsbar />
     </Flex>
   )
@@ -141,7 +137,7 @@ export default function Index() {
       <Grid
         h='100%'
         templateRows={[
-          '220px 250px minmax(auto, 1fr)',
+          'minmax(auto, 1fr) 300px 300px',
           '380px minmax(auto, 1fr)',
         ]}
         templateColumns={[
@@ -152,13 +148,13 @@ export default function Index() {
         ]}
         templateAreas={[
           `
-          "i1 i1"
+          "i1 i3"
           "m1 m1"
-          "i3 i4"       
+          "i4 i4"       
           `,
           `
           "m1 m1 m1"
-          "i1 i4 i3"
+          "i1 i3 i4"
           `,
           null,
           `
@@ -170,28 +166,18 @@ export default function Index() {
         <Flex
           gridArea='i1'
           direction='column'
-          padding={[1, 2, 3]}
+          p={[1, 2, null, 3]}
           color='green.300'
           border='1px solid'
           borderColor='green.300'
         >
-          <Box color='green.300'>Time till Death</Box>
-          <Counter timeLeft={state.count} />
-          <Box mt={2} color='green.300'>
-            Net Worth
-          </Box>
-          <Box mb={2}>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
-          <Box mb={2}>Dollars per second: {whole(getDps())}</Box>
-          <Button
-            my={2}
-            onClick={work}
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            Work
-          </Button>
+          <Box color='green.300'>Net Worth</Box>
+          <Box mb={[1, 2, null, 3]}>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
+          <Flex direction='column' mb={[1, 2, null, 3]}>
+            <Box color='green.300'>Time till Death</Box>
+            <Counter timeLeft={state.count} />
+          </Flex>
+          <Box>Dollars per second: {whole(getDps())}</Box>
         </Flex>
         <Box gridArea='m1' p={3} border='1px solid' borderColor='green.300'>
           <Terminal
@@ -224,12 +210,21 @@ export default function Index() {
         <Flex
           gridArea='i3'
           direction='column'
-          align='center'
-          padding={2}
+          padding={[1, 2, null, 3]}
           color='green.300'
           border='1px solid'
           borderColor='green.300'
         >
+          <Button
+            mb={[1, 2, null, 3]}
+            onClick={work}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            Work
+          </Button>
           <Slider id='Leverage' />
         </Flex>
         <Flex
@@ -237,7 +232,6 @@ export default function Index() {
           minHeight='0'
           minWidth='0'
           direction='column'
-          justify='space-between'
           padding={[1, 2, null, 3]}
           color='green.300'
           border='1px solid'
@@ -245,7 +239,7 @@ export default function Index() {
           overflow='auto'
         >
           <Button
-            mb={[1]}
+            mb={[1, 2, null, 3]}
             onClick={buyChair}
             variantColor='green'
             variant='outline'
@@ -257,7 +251,7 @@ export default function Index() {
           {['Shop', 'Office', 'Seat', 'Fund'].map((upgrade) => (
             <Button
               size='md'
-              mb={[1]}
+              mb={[1, 2, null, 3]}
               onClick={buyChair}
               variantColor='green'
               variant='outline'
