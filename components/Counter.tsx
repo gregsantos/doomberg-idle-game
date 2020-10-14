@@ -15,7 +15,7 @@ const CountDown = ({ timeLeft }: CountDownProps) => {
   }
 
   return (
-    <Flex className='countdown-wrapper'>
+    <Flex>
       <Flex
         p='0px 0px 0px 0px'
         direction='column'

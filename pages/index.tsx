@@ -137,48 +137,55 @@ export default function Index() {
       <Grid
         h='100%'
         templateRows={[
-          'minmax(auto, 1fr) 300px 200px',
-          '400px minmax(auto, 1fr)',
+          'minmax(auto, 1fr) 300px auto 200px',
+          '450px minmax(auto, 1fr)',
         ]}
-        templateColumns={[
-          'repeat(2, 1fr)',
-          'repeat(2, 1fr) minmax(200px, 1fr)',
-          'repeat(3, 1fr)',
-          '1fr 700px 1fr',
-        ]}
+        templateColumns={['repeat(2, 1fr)', 'repeat(3, 1fr)']}
         templateAreas={[
           `
-          "i1 i2"
+          "i1 i1"
           "m1 m1"
+          "i2 i2"
           "i3 i4"       
           `,
           `
-          "m1 m1 i3"
-          "i1 i2 i4"
-          `,
-          null,
-          `
-          "i1 m1 i3"
-          "i1 i2 i4"
+          "m1 m1 i1"
+          "i3 i4 i2"
           `,
         ]}
       >
-        <Flex
+        <Grid
           gridArea='i1'
-          direction='column'
-          p={[1, 2, null, 3]}
+          gridTemplateColumns={['repeat(2, 1fr)', '1fr']}
+          gridGap='1'
+          p={[1, 1, 2]}
           color='green.300'
           border='1px solid'
           borderColor='green.300'
         >
-          <Box color='green.300'>Net Worth</Box>
-          <Box mb={[1, 2, null, 3]}>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
-          <Flex direction='column' mb={[1, 2, null, 3]}>
+          <Flex direction='column' justify='center'>
+            <Flex direction='column' align='center'>
+              <Box color='green.300'>Net Worth</Box>
+              <Box>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
+            </Flex>
+            <Flex direction='column' align='center'>
+              <Box>$ per second</Box>
+              <Box>{whole(getDps())}</Box>
+            </Flex>
+          </Flex>
+          <Flex
+            direction='column'
+            align='center'
+            justify='center'
+            p={[1, 1, 2]}
+            color='green.300'
+            border='1px solid'
+            borderColor='green.300'
+          >
             <Box color='green.300'>Time till Death</Box>
             <Counter timeLeft={state.count} />
           </Flex>
-          <Box>Dollars per second: {whole(getDps())}</Box>
-        </Flex>
+        </Grid>
         <Box gridArea='m1' p={3} border='1px solid' borderColor='green.300'>
           <Terminal
             ref={terminal}
