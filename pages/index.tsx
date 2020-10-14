@@ -137,29 +137,29 @@ export default function Index() {
       <Grid
         h='100%'
         templateRows={[
-          'minmax(auto, 1fr) 300px 300px',
-          '380px minmax(auto, 1fr)',
+          'minmax(auto, 1fr) 300px 200px',
+          '400px minmax(auto, 1fr)',
         ]}
         templateColumns={[
           'repeat(2, 1fr)',
           'repeat(2, 1fr) minmax(200px, 1fr)',
           'repeat(3, 1fr)',
-          '1fr 600px 1fr',
+          '1fr 700px 1fr',
         ]}
         templateAreas={[
           `
-          "i1 i3"
+          "i1 i2"
           "m1 m1"
-          "i4 i4"       
+          "i3 i4"       
           `,
           `
-          "m1 m1 m1"
-          "i1 i3 i4"
+          "m1 m1 i3"
+          "i1 i2 i4"
           `,
           null,
           `
-          "i1 m1 i4"
-          "i1 i3 i4"
+          "i1 m1 i3"
+          "i1 i2 i4"
           `,
         ]}
       >
@@ -208,7 +208,7 @@ export default function Index() {
           />
         </Box>
         <Flex
-          gridArea='i3'
+          gridArea='i2'
           direction='column'
           padding={[1, 2, null, 3]}
           color='green.300'
@@ -226,6 +226,42 @@ export default function Index() {
             Work
           </Button>
           <Slider id='Leverage' />
+        </Flex>
+        <Flex
+          gridArea='i3'
+          minHeight='0'
+          minWidth='0'
+          direction='column'
+          padding={[1, 2, null, 3]}
+          color='green.300'
+          border='1px solid'
+          borderColor='green.300'
+          overflow='auto'
+        >
+          <Button
+            mb={[1, 2, null, 3]}
+            onClick={buyChair}
+            variantColor='green'
+            variant='outline'
+            zIndex={100}
+            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+          >
+            {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
+          </Button>
+          {['Shop', 'Office', 'Seat', 'Fund'].map((upgrade) => (
+            <Button
+              size='md'
+              mb={[1, 2, null, 3]}
+              onClick={buyChair}
+              variantColor='green'
+              variant='outline'
+              zIndex={100}
+              _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+              isDisabled={true}
+            >
+              {`Buy a ${upgrade} ${cost(pouch.chair, state).get(DOLLARS)}`}
+            </Button>
+          ))}
         </Flex>
         <Flex
           gridArea='i4'
