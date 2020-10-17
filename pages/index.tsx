@@ -11,33 +11,10 @@ import useWindowSize from 'hooks/useWindowSize'
 import useLocalStorage from 'hooks/useLocalStorage'
 import Counter from 'components/Counter'
 import { whole } from 'utils/numbers'
+import { DOLLARS, INITIAL_TIME, INTERVAL } from 'utils/constants'
+import { pouch } from 'utils/wallet'
+import { Ledger } from 'interfaces'
 // import onLoad from '../utils/'
-
-// 22645 days, 543480 hrs
-// gameTime ~150hrs
-const initialTime =
-  new Date().setFullYear(new Date().getFullYear() + 62) - Math.floor(Date.now())
-
-const interval = 100
-const MULTIPLIER = 1.15
-// Currencies
-const DOLLARS = 'DOLLARS'
-
-// Items
-const pouch = {
-  chair: {
-    type: 'Chair',
-    cost: (state) => {
-      if (state.chairs === 0) return Map({ [DOLLARS]: -10 })
-      return Map({ [DOLLARS]: -(10 * (state.chairs * MULTIPLIER)) })
-    },
-    effect: () => {
-      return Map({ [DOLLARS]: 0.1 })
-    },
-  },
-}
-
-type Ledger = Map<string, number>
 
 export const GridWrapper = (props) => {
   const { width, height } = useWindowSize()
@@ -67,22 +44,24 @@ export default function Index() {
   const [wallet, setWallet] = useState<Ledger>(Map())
   const [ledger, setLedger] = useState<Ledger>(Map())
   const [state, setState] = useState({
-    count: initialTime,
+    count: INITIAL_TIME,
     name: 'kiddo',
     netWorth: 0,
     payRate: 10,
     chairs: 0,
+    floors: 0,
+    buildings: 0,
   })
   const [, setSavedGame] = useLocalStorage<any>('savedGame', state)
   const terminal: { current?: any } = useRef()
 
   useInterval(() => {
     update()
-  }, interval)
+  }, INTERVAL)
 
   useInterval(() => {
     setSavedGame(state)
-  }, interval * 300)
+  }, INTERVAL * 300)
 
   const update = () => {
     if (state.count === 0) {
@@ -109,14 +88,15 @@ export default function Index() {
     terminal.current.pushToStdout('You worked 8 hours and earned $10')
   }
 
-  const buyChair = () => {
-    const walletWithCostsApplied = buy(pouch.chair, wallet, state)
+  const buyBuilding = (e) => {
+    const { id } = e.target
+    const walletWithCostsApplied = buy(pouch[id], wallet, state)
     if (!inTheBlack(walletWithCostsApplied)) {
       alert("You can't afford this upgrade")
       return
     }
 
-    const newWallet = add(pouch.chair, walletWithCostsApplied)
+    const newWallet = add(pouch[id], walletWithCostsApplied)
     setWallet(newWallet)
 
     const newLedger = effects(Object.values(pouch), newWallet)
@@ -124,7 +104,7 @@ export default function Index() {
 
     setState({
       ...state,
-      chairs: state.chairs + 1,
+      [`${id}s`]: state[`${id}s`] + 1,
     })
   }
 
@@ -245,28 +225,20 @@ export default function Index() {
           borderColor='green.300'
           overflow='auto'
         >
-          <Button
-            mb={[1, 2, null, 3]}
-            onClick={buyChair}
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
-          </Button>
-          {['Shop', 'Office', 'Seat', 'Fund'].map((upgrade) => (
+          {['chair', 'floor', 'building'].map((upgrade) => (
             <Button
-              size='md'
+              id={upgrade}
               mb={[1, 2, null, 3]}
-              onClick={buyChair}
+              onClick={buyBuilding}
               variantColor='green'
               variant='outline'
               zIndex={100}
               _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-              isDisabled={true}
+              isDisabled={false}
             >
-              {`Buy a ${upgrade} ${cost(pouch.chair, state).get(DOLLARS)}`}
+              {`Buy a ${upgrade} ${whole(
+                cost(pouch[upgrade], state).get(DOLLARS)
+              )}`}
             </Button>
           ))}
         </Flex>
@@ -281,28 +253,20 @@ export default function Index() {
           borderColor='green.300'
           overflow='auto'
         >
-          <Button
-            mb={[1, 2, null, 3]}
-            onClick={buyChair}
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            {`Buy a Chair ${cost(pouch.chair, state).get(DOLLARS)}`}
-          </Button>
-          {['Shop', 'Office', 'Seat', 'Fund'].map((upgrade) => (
+          {['chair', 'floor', 'building'].map((upgrade) => (
             <Button
-              size='md'
+              id={upgrade}
               mb={[1, 2, null, 3]}
-              onClick={buyChair}
+              onClick={buyBuilding}
               variantColor='green'
               variant='outline'
               zIndex={100}
               _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
               isDisabled={true}
             >
-              {`Buy a ${upgrade} ${cost(pouch.chair, state).get(DOLLARS)}`}
+              {`Buy a ${upgrade} ${whole(
+                cost(pouch[upgrade], state).get(DOLLARS)
+              )}`}
             </Button>
           ))}
         </Flex>
