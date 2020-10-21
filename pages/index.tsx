@@ -5,7 +5,7 @@ import { Map } from 'immutable'
 import { add, sum, buy, cost, inTheBlack, effects } from 'merchant.js'
 import Logo from 'components/Logo'
 import Newsbar from 'components/Newsbar'
-import Slider from 'components/Slider'
+// import Slider from 'components/Slider'
 import { useInterval } from 'hooks/useInterval'
 import useWindowSize from 'hooks/useWindowSize'
 import useLocalStorage from 'hooks/useLocalStorage'
@@ -47,6 +47,7 @@ export default function Index() {
     count: INITIAL_TIME,
     name: 'kiddo',
     netWorth: 0,
+    occupation: 'Shoe Shine',
     payRate: 10,
     chairs: 0,
     floors: 0,
@@ -117,53 +118,68 @@ export default function Index() {
       <Grid
         h='100%'
         templateRows={[
-          'minmax(auto, 1fr) 300px auto 200px',
-          '450px minmax(auto, 1fr)',
+          'auto 300px auto 200px',
+          'minmax(16em, 18em) 200px minmax(auto, 1fr) auto',
         ]}
         templateColumns={['repeat(2, 1fr)', 'repeat(3, 1fr)']}
         templateAreas={[
           `
           "i1 i1"
           "m1 m1"
-          "i2 i2"
-          "i3 i4"       
+          "b1 b2"
+          "b3 b4"       
           `,
           `
           "m1 m1 i1"
-          "i3 i4 i2"
+          "m1 m1 b1"
+          "b2 b3 b4"
+          "b2 b3 b4"
           `,
         ]}
       >
         <Grid
           gridArea='i1'
           gridTemplateColumns={['repeat(2, 1fr)', '1fr']}
-          gridGap='1'
+          gridTemplateRows={['1fr auto', 'auto 1fr']}
+          gridGap={['1', '2']}
           p={[1, 1, 2]}
           color='green.300'
           border='1px solid'
           borderColor='green.300'
         >
-          <Flex direction='column' justify='center'>
-            <Flex direction='column' align='center'>
+          <Flex direction='column' p={[1, 2]}>
+            <Flex justify='space-between'>
               <Box color='green.300'>Net Worth</Box>
               <Box>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
             </Flex>
-            <Flex direction='column' align='center'>
-              <Box>$ per second</Box>
-              <Box>{whole(getDps())}</Box>
+            <Flex justify='space-between'>
+              <Box color='green.300'>$ per sec</Box>
+              <Box>$ {whole(getDps())}</Box>
             </Flex>
           </Flex>
           <Flex
             direction='column'
             align='center'
             justify='center'
-            p={[1, 1, 2]}
+            p={[0, 1, 2]}
             color='green.300'
             border='1px solid'
             borderColor='green.300'
           >
             <Box color='green.300'>Time till Death</Box>
             <Counter timeLeft={state.count} />
+          </Flex>
+          <Flex align='center' justify='center' gridColumn={['1 / span 2', 1]}>
+            <Button
+              flex='1'
+              onClick={work}
+              variantColor='green'
+              variant='outline'
+              zIndex={100}
+              _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+            >
+              Work ({state.occupation})
+            </Button>
           </Flex>
         </Grid>
         <Box gridArea='m1' p={3} border='1px solid' borderColor='green.300'>
@@ -195,27 +211,7 @@ export default function Index() {
           />
         </Box>
         <Flex
-          gridArea='i2'
-          direction='column'
-          padding={[1, 2, null, 3]}
-          color='green.300'
-          border='1px solid'
-          borderColor='green.300'
-        >
-          <Button
-            mb={[1, 2, null, 3]}
-            onClick={work}
-            variantColor='green'
-            variant='outline'
-            zIndex={100}
-            _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
-          >
-            Work
-          </Button>
-          <Slider id='Leverage' />
-        </Flex>
-        <Flex
-          gridArea='i3'
+          gridArea='b1'
           minHeight='0'
           minWidth='0'
           direction='column'
@@ -243,7 +239,63 @@ export default function Index() {
           ))}
         </Flex>
         <Flex
-          gridArea='i4'
+          gridArea='b2'
+          minHeight='0'
+          minWidth='0'
+          direction='column'
+          padding={[1, 2, null, 3]}
+          color='green.300'
+          border='1px solid'
+          borderColor='green.300'
+          overflow='auto'
+        >
+          {['chair', 'floor', 'building'].map((upgrade) => (
+            <Button
+              id={upgrade}
+              mb={[1, 2, null, 3]}
+              onClick={buyBuilding}
+              variantColor='green'
+              variant='outline'
+              zIndex={100}
+              _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+              isDisabled={false}
+            >
+              {`Buy a ${upgrade} ${whole(
+                cost(pouch[upgrade], state).get(DOLLARS)
+              )}`}
+            </Button>
+          ))}
+        </Flex>
+        <Flex
+          gridArea='b3'
+          minHeight='0'
+          minWidth='0'
+          direction='column'
+          padding={[1, 2, null, 3]}
+          color='green.300'
+          border='1px solid'
+          borderColor='green.300'
+          overflow='auto'
+        >
+          {['chair', 'floor', 'building'].map((upgrade) => (
+            <Button
+              id={upgrade}
+              mb={[1, 2, null, 3]}
+              onClick={buyBuilding}
+              variantColor='green'
+              variant='outline'
+              zIndex={100}
+              _hover={{ bg: 'rgba(255, 255, 255, 0.08)' }}
+              isDisabled={false}
+            >
+              {`Buy a ${upgrade} ${whole(
+                cost(pouch[upgrade], state).get(DOLLARS)
+              )}`}
+            </Button>
+          ))}
+        </Flex>
+        <Flex
+          gridArea='b4'
           minHeight='0'
           minWidth='0'
           direction='column'
