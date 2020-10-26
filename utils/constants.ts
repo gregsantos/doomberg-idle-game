@@ -4,6 +4,7 @@ const BASE_COSTS = {
   CHAIR: 15,
   FLOOR: 100,
   BUILDING: 500,
+  BLOCK: 700,
 }
 // 22645 days, 543480 hrs, gameTime ~150hrs
 const INITIAL_TIME =

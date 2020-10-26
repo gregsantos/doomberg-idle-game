@@ -6,7 +6,6 @@ import { add, sum, buy, inTheBlack, effects } from 'merchant.js'
 import Logo from 'components/Logo'
 import Newsbar from 'components/Newsbar'
 import ButtonGroup from 'components/ButtonGroup'
-// import Slider from 'components/Slider'
 import { useInterval } from 'hooks/useInterval'
 import useWindowSize from 'hooks/useWindowSize'
 import useLocalStorage from 'hooks/useLocalStorage'
@@ -15,7 +14,6 @@ import { whole } from 'utils/numbers'
 import { DOLLARS, INITIAL_TIME, INTERVAL } from 'utils/constants'
 import { pouch } from 'utils/wallet'
 import { Ledger } from 'interfaces'
-// import onLoad from '../utils/'
 
 export const GridWrapper = (props) => {
   const { width, height } = useWindowSize()
@@ -56,6 +54,7 @@ export default function Index() {
     chairs: 0,
     floors: 0,
     buildings: 0,
+    blocks: 0,
   })
   const [, setSavedGame] = useLocalStorage<any>('savedGame', state)
   const terminal: { current?: any } = useRef()
@@ -77,7 +76,6 @@ export default function Index() {
     setState({
       ...state,
       count: state.count - (3600 * 1000) / 10,
-      // count: state.count - (3600 / 60) * 1000,
       netWorth: whole(sum(wallet, ledger).get(DOLLARS)) || 0,
     })
   }
@@ -124,9 +122,9 @@ export default function Index() {
           minHeight='100%'
           templateRows={[
             'auto 300px auto auto',
-            'minmax(16em, 18em) 200px minmax(auto, 1fr) auto',
+            '200px minmax(auto, 1fr) auto',
           ]}
-          templateColumns={['repeat(2, 1fr)', 'repeat(3, 1fr)']}
+          templateColumns={['repeat(2, 1fr)', 'repeat(4, 1fr)']}
           templateAreas={[
             `
           "i1 i1"
@@ -135,10 +133,9 @@ export default function Index() {
           "b3 b4"       
           `,
             `
-          "m1 m1 i1"
-          "m1 m1 b1"
-          "b2 b3 b4"
-          "b2 b3 b4"
+          "m1 m1 m1 i1"
+          "m1 m1 m1 i1"
+          "b1 b2 b3 b4"
           `,
           ]}
         >
@@ -231,7 +228,11 @@ export default function Index() {
             borderColor='green.300'
             overflow='auto'
           >
-            <ButtonGroup gameState={state} buyBuilding={buyBuilding} />
+            <ButtonGroup
+              disabled={false}
+              gameState={state}
+              buyBuilding={buyBuilding}
+            />
           </Flex>
           <Flex
             gridArea='b2'
@@ -245,7 +246,7 @@ export default function Index() {
             borderColor='green.300'
             overflow='auto'
           >
-            <ButtonGroup gameState={state} buyBuilding={buyBuilding} />
+            <ButtonGroup disabled gameState={state} buyBuilding={buyBuilding} />
           </Flex>
           <Flex
             gridArea='b3'
@@ -259,7 +260,7 @@ export default function Index() {
             borderColor='green.300'
             overflow='auto'
           >
-            <ButtonGroup gameState={state} buyBuilding={buyBuilding} />
+            <ButtonGroup disabled gameState={state} buyBuilding={buyBuilding} />
           </Flex>
           <Flex
             gridArea='b4'
@@ -273,7 +274,7 @@ export default function Index() {
             borderColor='green.300'
             overflow='auto'
           >
-            <ButtonGroup gameState={state} buyBuilding={buyBuilding} />
+            <ButtonGroup disabled gameState={state} buyBuilding={buyBuilding} />
           </Flex>
         </Grid>
       </Box>

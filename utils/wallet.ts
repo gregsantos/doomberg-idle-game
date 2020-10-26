@@ -38,6 +38,18 @@ const pouch = {
       return Map({ [DOLLARS]: 4 })
     },
   },
+  block: {
+    type: 'Block',
+    cost: (state) => {
+      if (state.blocks === 0) return Map({ [DOLLARS]: -BASE_COSTS.BLOCK })
+      return Map({
+        [DOLLARS]: -(BASE_COSTS.BLOCK * (state.blocks * MULTIPLIER)),
+      })
+    },
+    effect: () => {
+      return Map({ [DOLLARS]: 7 })
+    },
+  },
 }
 
 export { pouch }
