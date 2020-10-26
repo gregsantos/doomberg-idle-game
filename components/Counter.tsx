@@ -7,7 +7,9 @@ const CountDown = ({ timeLeft }: CountDownProps) => {
   const getTimeLeft = () => {
     return {
       years: Math.floor(timeLeft / (1000 * 60 * 60 * 24) / 365),
-      days: Math.floor(timeLeft / (1000 * 60 * 60 * 24)),
+      days: Math.floor(
+        (timeLeft % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24)
+      ),
       hours: Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
       minutes: Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60)),
       seconds: Math.floor((timeLeft % (1000 * 60)) / 1000),

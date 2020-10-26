@@ -7,8 +7,10 @@ const BASE_COSTS = {
   BLOCK: 700,
 }
 // 22645 days, 543480 hrs, gameTime ~150hrs
-const INITIAL_TIME =
-  new Date().setFullYear(new Date().getFullYear() + 62) - Math.floor(Date.now())
+// avg lifespan 71yr = 31536000000 ms
+// 31536000000 * (71 - 13) (13 is age at start of game)
+const INITIAL_TIME = 31536000000 * (71 - 13)
+//  new Date().setFullYear(new Date().getFullYear() + 62) - Math.floor(Date.now())
 
 const INTERVAL = 100 // 0.1 second
 

@@ -1,5 +1,13 @@
 import React, { useState, useRef } from 'react'
-import { Flex, Box, Grid, Button } from '@chakra-ui/core'
+import {
+  Flex,
+  Box,
+  Grid,
+  Button,
+  Stat,
+  StatLabel,
+  StatNumber,
+} from '@chakra-ui/core'
 import Terminal from 'react-console-emulator'
 import { Map } from 'immutable'
 import { add, sum, buy, inTheBlack, effects } from 'merchant.js'
@@ -121,12 +129,13 @@ export default function Index() {
         <Grid
           minHeight='100%'
           templateRows={[
-            'auto 300px auto auto',
-            '200px minmax(auto, 1fr) auto',
+            'auto auto 250px auto auto',
+            '300px 100px minmax(auto, 1fr)',
           ]}
           templateColumns={['repeat(2, 1fr)', 'repeat(4, 1fr)']}
           templateAreas={[
             `
+          "ad ad"
           "i1 i1"
           "m1 m1"
           "b1 b2"
@@ -134,7 +143,7 @@ export default function Index() {
           `,
             `
           "m1 m1 m1 i1"
-          "m1 m1 m1 i1"
+          "m1 m1 m1 ad"
           "b1 b2 b3 b4"
           `,
           ]}
@@ -150,10 +159,10 @@ export default function Index() {
             borderColor='green.300'
           >
             <Flex direction='column' p={[1, 2]}>
-              <Flex justify='space-between'>
-                <Box color='green.300'>Net Worth</Box>
-                <Box>$ {whole(wallet.get(DOLLARS)) || 0}</Box>
-              </Flex>
+              <Stat justifyContent='space-between'>
+                <StatLabel>Net Worth</StatLabel>
+                <StatNumber>$ {whole(wallet.get(DOLLARS)) || 0}</StatNumber>
+              </Stat>
               <Flex justify='space-between'>
                 <Box color='green.300'>$ per sec</Box>
                 <Box>$ {whole(getDps())}</Box>
@@ -188,6 +197,26 @@ export default function Index() {
               </Button>
             </Flex>
           </Grid>
+          <Flex
+            gridArea='ad'
+            justify='center'
+            p={[0, 1, 2]}
+            color='green.300'
+            border='1px solid'
+            borderColor='green.300'
+            overflow='auto'
+          >
+            <Flex
+              justify='center'
+              align='center'
+              p={[1, 1, 2]}
+              color='green.300'
+              border='1px solid'
+              borderColor='green.300'
+            >
+              Ad goes here
+            </Flex>
+          </Flex>
           <Box gridArea='m1' p={3} border='1px solid' borderColor='green.300'>
             <Terminal
               ref={terminal}
